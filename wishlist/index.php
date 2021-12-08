@@ -13,19 +13,17 @@ $app = new \Slim\App();
 
 $app->get('/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
-        $id = $args['id'];
-        $control = new \mywishlist\controleurs\ControleurParticipant();
-        $rp->getBody()->write($control->page_un_item($id));
-        return($rp);
+
+        $control = new \mywishlist\controleurs\ControleurParticipant($this);
+        return($control->page_un_item($rq, $rp, $args));
+
     }
 );
 
-$app->get('/liste/{id}', 
+$app->get('/liste/{no}', 
     function (Request $rq, Response $rp, $args):Response{
-        $id = $args['id'];
-        $control = new \mywishlist\controleurs\ControleurParticipant();
-        $rp->getBody()->write($control->page_une_liste($id));
-        return($rp);
+        $control = new \mywishlist\controleurs\ControleurParticipant($this);
+        return($control->page_une_liste($rq, $rp, $args));
     }
 );
 

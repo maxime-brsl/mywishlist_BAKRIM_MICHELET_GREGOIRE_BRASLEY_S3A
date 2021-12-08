@@ -1,17 +1,17 @@
 <?php
 
 namespace mywishlist\view;
+use \mywishlist\controleurs\ControleurParticipant;
 
 class VueParticipant{
 
-    public function pageHTML($contenu){
-
-        $contenuHTML = $this->unItemHTML($contenu);
+    public function pageHTML($contenuHTML){
 
         $html = <<<END
 
         <!DOCTYPE html>
         <head>
+            <meta charset="UTF8">
             <link rel="stylesheet" href="./../rendu.css">
         </head>
         <body>
@@ -63,6 +63,41 @@ class VueParticipant{
         $contenu = $contenu . $image;
 
         return($contenu);
+    }
+
+    /**
+     * fonction qui permet de generer une page html pour une liste
+     * @param mixed $infoliste = informations sur une liste 
+     * @return string une page html pour afficher la liste
+     */
+    public function uneListeHTML($infoListe){
+
+        $html = "";
+
+        $informations = explode(",", $infoListe);
+
+        foreach($informations as $value){
+
+            $cle = explode(":", $value);
+            $infos = explode("\"", $cle[1]);
+
+            if($cle[0] === "{\"no\""){
+                $html = $html . "<h1>Liste n°$cle[1]</h1>";
+            }
+            else if($cle[0] === "\"titre\""){
+                $html = $html . "<h2>$infos[1]</h2>";
+            }
+            else if($cle[0] === "\"expiration\""){
+                $html = $html . "<p id=\"exp\">Liste valable jusqu au $infos[1]</p>";
+            }
+            else if($cle[0] != "\"token\""){
+                $html = $html . "<p>$infos[1]</p>";
+            }
+
+        }
+
+        return($html);
+
     }
 
 }

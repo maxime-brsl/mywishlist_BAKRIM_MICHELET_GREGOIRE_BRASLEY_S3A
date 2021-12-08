@@ -2,3 +2,11 @@ body{
     color: white;
     background-color: black;
 }
+
+#exp{
+    text-decoration: underline;
+}
+
+h2{
+    color: violet;
+}

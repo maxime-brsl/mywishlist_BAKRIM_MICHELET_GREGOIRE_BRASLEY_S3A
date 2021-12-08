@@ -54,3 +54,6 @@ if(isset($_GET['id'])){
     echo $ligne;
     
 }
+
+$ligne = \mywishlist\models\Liste::where('no', '=', 2)->first();
+echo $ligne;
