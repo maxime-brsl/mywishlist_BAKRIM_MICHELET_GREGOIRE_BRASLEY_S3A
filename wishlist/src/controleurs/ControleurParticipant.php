@@ -11,30 +11,10 @@ class ControleurParticipant{
      */
     public function page_un_item($id_item){
         $item_concerne = \mywishlist\models\Item::where('id', '=', $id_item)->first();
-        $infos = explode(",", $item_concerne);
-        $contenu = "<h1>Item n°$id_item</h1>";
-
-        // on ajoute le contenu petit a petit
-        foreach($infos as $v){
-
-            $cle = explode(":", $v);
-    
-            // si on trouve l image alors il faut sauver l image pour l afficher apres
-            if($cle[0] === "\"img\""){
-                $image = explode("\"", $cle[1]);
-            }
-            else{
-                // sinon on met l information directement 
-                $information = explode("\"", $cle[1]);
-                $contenu = $contenu . "<p> $information[1] </p>";
-            }
-        }
         
-        // on n oublie pas de mettre l image si on en a trouve une
-        $contenu = $contenu . "<img src='../img/$image[1]'>";
         $vue = new \mywishlist\view\VueParticipant();
         
-        $pageHTML = $vue->PageHTML($contenu);
+        $pageHTML = $vue->PageHTML($item_concerne);
         return($pageHTML);
     }
 
