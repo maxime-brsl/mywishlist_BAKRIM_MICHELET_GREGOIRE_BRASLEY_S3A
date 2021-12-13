@@ -5,14 +5,20 @@ use \mywishlist\controleurs\ControleurParticipant;
 
 class VueParticipant{
 
+    /**
+     * fonction qui permet de generer une page html a partir d un contenu
+     * @param string $contenuHTML = le contenu formate au codage html a afficher
+     * @return string page html correspondant
+     */
     public function pageHTML($contenuHTML){
 
         $html = <<<END
 
         <!DOCTYPE html>
         <head>
-            <meta charset="UTF8">
-            <link rel="stylesheet" href="./../rendu.css">
+            <meta charset="UTF-8">
+            <title>Wishlist de phpMyAdmin</title>
+            <link rel="stylesheet" href="./../css/rendu.css">
         </head>
         <body>
 
@@ -26,7 +32,7 @@ class VueParticipant{
     }
 
     /**
-     * fonction qui permet de generer une pafe HTML
+     * fonction qui permet de generer une page HTML pour un participant
      * @param string $contenu = le contenu de la page html
      * @return mixed page HTML avec le contenu
      */
@@ -66,16 +72,62 @@ class VueParticipant{
     }
 
     /**
+     * fonction qui permet de generer une page HTML d un item 
+     * en moins detaille pour faire une liste 
+     * @param string $contenu = le contenu de la page html
+     * @return mixed page HTML avec le contenu
+     */
+    private function unItemHTMLPourListe($infoItem){
+        $contenu = "";
+
+        $infos = explode(",", $infoItem);
+
+        // on ajoute le contenu petit a petit
+        foreach($infos as $v){
+
+            // on separe les cles des infos pour savoir si c le nom le prix etc
+            $cle = explode(":", $v);
+
+            $information = explode("\"", $cle[1]);
+    
+            // si on trouve l image alors il faut sauver l image pour l afficher apres
+            if($cle[0] === "\"img\""){
+                $image = $information[1];
+            }
+            else if($cle[0] === "\"nom\""){
+                $contenu = $contenu . "<h1> $information[1] </h1>";
+            }
+            else if($cle[0] === "{\"id\""){
+                $id = $information[0];
+            }
+            
+        }
+        
+        // on n oublie pas de mettre l image si on en a trouve une
+        // et on penses a mettre le lien pour suivre l item en detail
+        $contenu = <<<END
+
+            $contenu
+            <a href="/wishlist/item/$id"><img src=../img/$image></a>
+
+        END;
+
+        return($contenu);
+    }
+
+    /**
      * fonction qui permet de generer une page html pour une liste
-     * @param mixed $infoliste = informations sur une liste 
+     * @param mixed $infoListe = informations sur une liste 
+     * @param mixed $items = liste d items a afficher
      * @return string une page html pour afficher la liste
      */
-    public function uneListeHTML($infoListe){
+    public function uneListeHTML($infoListe, $items){
 
         $html = "";
 
         $informations = explode(",", $infoListe);
 
+        // on affiche d abord les informations de la liste
         foreach($informations as $value){
 
             $cle = explode(":", $value);
@@ -88,12 +140,25 @@ class VueParticipant{
                 $html = $html . "<h2>$infos[1]</h2>";
             }
             else if($cle[0] === "\"expiration\""){
-                $html = $html . "<p id=\"exp\">Liste valable jusqu au $infos[1]</p>";
+                if(date("y.m.d") >= $infos[1]){
+                    $html = $html . "<p id=\"exp\">Cette liste etait valable jusqu au $infos[1]</p>";
+                }
+                else{
+                    $html = $html . "<p>La liste est encore disponible</p>";
+                }
             }
             else if($cle[0] != "\"token\""){
                 $html = $html . "<p>$infos[1]</p>";
             }
 
+        }
+
+        // cette variable permettra d appeler les methodes de la classe
+        $temp = new VueParticipant();
+
+        // on ajoute l affichage des items dans la liste 
+        foreach($items as $v){
+            $html = $html . $temp->unItemHTMLPourListe($v);
         }
 
         return($html);

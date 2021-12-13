@@ -9,6 +9,18 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 Eloquent::start('src/conf/conf.ini');
 
+session_start();
+
+if(!isset($_SESSION['typeGens'])){
+    if(isset($_GET['typeGens'])){
+        $_SESSION['typeGens'] = "admin";
+    }
+    else{
+        $_SESSION['typeGens'] = "participant";
+    }
+}
+
+
 $app = new \Slim\App();
 
 $app->get('/item/{id}', 

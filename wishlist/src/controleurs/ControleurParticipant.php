@@ -4,8 +4,6 @@ namespace mywishlist\controleurs;
 
 class ControleurParticipant{
 
-    const VIEW_ITEM = 1;
-    const VIEW_LISTE = 2;
     private $container;
 
     /**
@@ -41,19 +39,15 @@ class ControleurParticipant{
      * @return mixed contenu de la liste
      */
     public function page_une_liste($rq, $rp, $args){
+        
+        // on recupere la liste concernee
         $liste_concernee = \mywishlist\models\Liste::where('no', '=', $args['no'])->first();
-
-        $vue = new \mywishlist\view\VueParticipant();
-        $listeHTML = $vue->uneListeHTML($liste_concernee);
-
         // on recupere les items de la liste de souhaits
         $items_liste = \mywishlist\models\Item::where('liste_id', '=', $args['no'])->get();
 
-        // on ajoute leur trad en html a la liste
-        foreach($items_liste as $it){
-            $listeHTML = $listeHTML . $vue->unItemHTML($it);
-        }
-
+        // on genere la page html
+        $vue = new \mywishlist\view\VueParticipant();
+        $listeHTML = $vue->uneListeHTML($liste_concernee, $items_liste);
         $pageHTML = $vue->PageHTML($listeHTML);
 
         $rp->getBody()->write($pageHTML);
