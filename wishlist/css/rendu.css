@@ -3,6 +3,12 @@ body{
     background-color: black;
 }
 
+article{
+    box-shadow: 0px 0px 10px green;
+    padding: 5px;
+    margin-top: 10px;
+}
+
 #expire{
     text-decoration: underline;
     color: red;
@@ -13,8 +19,17 @@ body{
     color: green;
 }
 
+#listeItem{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
 h1{
     text-decoration: underline;
+    color: brown;
+    font-size: 30px;
 }
 
 h2{

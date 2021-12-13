@@ -1,9 +1,8 @@
 <?php
 
 namespace mywishlist\view;
-use \mywishlist\controleurs\ControleurParticipant;
 
-class VueParticipant{
+class VueProprio{
 
     /**
      * fonction qui permet de generer une page html a partir d un contenu
@@ -157,7 +156,7 @@ class VueParticipant{
         $html = $html . "</article><article id=\"listeItem\">";
 
         // cette variable permettra d appeler les methodes de la classe
-        $temp = new VueParticipant();
+        $temp = new VueProprio();
 
         // on ajoute l affichage des items dans la liste 
         foreach($items as $v){
