@@ -24,6 +24,7 @@ class VueParticipant{
 
             $contenuHTML
 
+            <script src="../js/listener.js"></script>
         </body>
 
         END;
@@ -37,10 +38,11 @@ class VueParticipant{
      * @return mixed page HTML avec le contenu
      */
     public function unItemHTML($infoItem){
+
         $contenu = "";
-
+        
         $infos = explode(",", $infoItem);
-
+        
         // on ajoute le contenu petit a petit
         foreach($infos as $v){
 
@@ -54,7 +56,8 @@ class VueParticipant{
                 $image = "<img src='../img/$information[1]'>";
             }
             else if($cle[0] === "\"nom\""){
-                $contenu = $contenu . "<h1> $information[1] </h1>";
+                $nomItem = $information[1];
+                $contenu = $contenu . "<h1 id=\"nomItem\"> $nomItem </h1>";
             }
             else if($cle[0] === "\"tarif\""){
                 $contenu = $contenu . "<p> tarif : $information[1] € </p>";
@@ -68,7 +71,36 @@ class VueParticipant{
         // on n oublie pas de mettre l image si on en a trouve une
         $contenu = $contenu . $image;
 
+        // on met la zone de reservation que si l item est libre
+        if(!isset($_COOKIE["reserve$nomItem"])){
+            $v = new VueParticipant();
+            $zoneReserv = $v->ajouterZoneReservation();
+    
+            $contenu = $contenu . $zoneReserv;
+        }
+
         return($contenu);
+    }
+
+    /**
+     * fonction qui permet de rajouter une zone de reservation si 
+     * l item n est pas reserve
+     * @return string html contenant la zone de reservation
+     */
+    private function ajouterZoneReservation(){
+        $html = <<<END
+
+            <article>
+            <h2>Cet article n'est toujours pas reservee :sniff:</h2>
+            <p>You can help by changing that</br>Mettez un petit message pour reserver :smooch:</p>
+            <textarea id="msg" name="msg" rows="5" cols="33"></textarea>
+            <button id="reservB">Reserver</button>
+
+            </article>
+
+        END;
+
+        return($html);
     }
 
     /**
@@ -108,7 +140,7 @@ class VueParticipant{
         $contenu = <<<END
 
             $contenu
-            <a href="/wishlist/item/$id"><img src=../img/$image alt="$image"></a>
+            <a href="/wishlist/item/$id"><img src=../img/$image alt="$image" width="350px"></a>
             </article>
 
         END;
