@@ -514,6 +514,10 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
+## htaccess
+
+.htaccess
+
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
