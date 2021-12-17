@@ -32,7 +32,7 @@ $app->get('/item/{id}',
     }
 );
 
-$app->get('/liste/{no}', 
+$app->get('/liste/{token}', 
     function (Request $rq, Response $rp, $args):Response{
         $control = new \mywishlist\controleurs\ControleurParticipant($this);
         return($control->page_une_liste($rq, $rp, $args));

@@ -41,9 +41,9 @@ class ControleurParticipant{
     public function page_une_liste($rq, $rp, $args){
         
         // on recupere la liste concernee
-        $liste_concernee = \mywishlist\models\Liste::where('no', '=', $args['no'])->first();
+        $liste_concernee = \mywishlist\models\Liste::where('token', '=', $args['token'])->first();
         // on recupere les items de la liste de souhaits
-        $items_liste = \mywishlist\models\Item::where('liste_id', '=', $args['no'])->get();
+        $items_liste = \mywishlist\models\Item::where('liste_id', '=', $liste_concernee->no)->get();
 
         // on genere la page html
         $vue = new \mywishlist\view\VueParticipant();

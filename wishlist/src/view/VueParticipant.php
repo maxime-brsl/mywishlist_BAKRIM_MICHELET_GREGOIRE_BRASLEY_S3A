@@ -56,8 +56,8 @@ class VueParticipant{
                 $image = "<img src='../img/$information[1]'>";
             }
             else if($cle[0] === "\"nom\""){
-                $nomItem = $information[1];
-                $contenu = $contenu . "<h1 id=\"nomItem\"> $nomItem </h1>";
+                $contenu = $contenu . "<h1 id=\"nomItem\"> $information[1] </h1>";
+                $nomItem = str_replace(" ", "_", $information[1]);
             }
             else if($cle[0] === "\"tarif\""){
                 $contenu = $contenu . "<p> tarif : $information[1] € </p>";
@@ -72,11 +72,13 @@ class VueParticipant{
         $contenu = $contenu . $image;
 
         // on met la zone de reservation que si l item est libre
-        if(!isset($_COOKIE["reserve$nomItem"])){
+        if(!isset($_COOKIE[$nomItem])){
             $v = new VueParticipant();
             $zoneReserv = $v->ajouterZoneReservation();
-    
             $contenu = $contenu . $zoneReserv;
+        }
+        else{
+            $contenu = $contenu . "<p>L'item est deja reserve</p>";
         }
 
         return($contenu);
