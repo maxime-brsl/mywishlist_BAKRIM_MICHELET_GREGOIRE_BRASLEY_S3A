@@ -1,6 +1,7 @@
 <?php
 
 namespace mywishlist\view;
+use \mywishlist\controleurs\ControleurParticipant;
 
 class VueProprio{
 
@@ -23,6 +24,7 @@ class VueProprio{
 
             $contenuHTML
 
+            <script src="../js/listener.js"></script>
         </body>
 
         END;
@@ -36,38 +38,50 @@ class VueProprio{
      * @return mixed page HTML avec le contenu
      */
     public function unItemHTML($infoItem){
+
         $contenu = "";
+        $nomItem = $infoItem->nom;
+        $image = "<img src='../img/$infoItem->img'>";
 
-        $infos = explode(",", $infoItem);
-
-        // on ajoute le contenu petit a petit
-        foreach($infos as $v){
-
-            // on separe les cles des infos pour savoir si c le nom le prix etc
-            $cle = explode(":", $v);
-
-            $information = explode("\"", $cle[1]);
-    
-            // si on trouve l image alors il faut sauver l image pour l afficher apres
-            if($cle[0] === "\"img\""){
-                $image = "<img src='../img/$information[1]'>";
-            }
-            else if($cle[0] === "\"nom\""){
-                $contenu = $contenu . "<h1> $information[1] </h1>";
-            }
-            else if($cle[0] === "\"tarif\""){
-                $contenu = $contenu . "<p> tarif : $information[1] € </p>";
-            }
-            else{
-                // sinon on met l information directement 
-                $contenu = $contenu . "<p> $information[1] </p>";
-            }
-        }
+        $contenu = $contenu . "<h1>$nomItem</h1>";
+        $contenu = $contenu . "<p>$infoItem->descr</p>";
+        $contenu = $contenu . "<p>$infoItem->tarif €</p>";
         
         // on n oublie pas de mettre l image si on en a trouve une
         $contenu = $contenu . $image;
 
+        // on met la zone de reservation que si l item est libre
+        if(!isset($_COOKIE[$nomItem])){
+            $v = new VueProprio();
+            $zoneReserv = $v->ajouterZoneReservation();
+            $contenu = $contenu . $zoneReserv;
+        }
+        else{
+            $contenu = $contenu . "<p>L'item est deja reserve</p>";
+        }
+
         return($contenu);
+    }
+
+    /**
+     * fonction qui permet de rajouter une zone de reservation si 
+     * l item n est pas reserve
+     * @return string html contenant la zone de reservation
+     */
+    private function ajouterZoneReservation(){
+        $html = <<<END
+
+            <article>
+            <h2>Cet article n'est toujours pas reservee :sniff:</h2>
+            <p>You can help by changing that</br>Mettez un petit message pour reserver :smooch:</p>
+            <textarea id="msg" name="msg" rows="5" cols="33"></textarea>
+            <button id="reservB">Reserver</button>
+
+            </article>
+
+        END;
+
+        return($html);
     }
 
     /**
@@ -79,35 +93,15 @@ class VueProprio{
     private function unItemHTMLPourListe($infoItem){
         $contenu = "<article>";
 
-        $infos = explode(",", $infoItem);
+        $contenu = $contenu . "<h1>$infoItem->nom</h1>";
+        $id = $infoItem->id;
+        $image = $infoItem->img;
 
-        // on ajoute le contenu petit a petit
-        foreach($infos as $v){
-
-            // on separe les cles des infos pour savoir si c le nom le prix etc
-            $cle = explode(":", $v);
-
-            $information = explode("\"", $cle[1]);
-    
-            // si on trouve l image alors il faut sauver l image pour l afficher apres
-            if($cle[0] === "\"img\""){
-                $image = $information[1];
-            }
-            else if($cle[0] === "\"nom\""){
-                $contenu = $contenu . "<h1> $information[1] </h1>";
-            }
-            else if($cle[0] === "{\"id\""){
-                $id = $information[0];
-            }
-            
-        }
-        
-        // on n oublie pas de mettre l image si on en a trouve une
-        // et on penses a mettre le lien pour suivre l item en detail
+        // on met une miage avec un lien vers l item en question
         $contenu = <<<END
 
             $contenu
-            <a href="/wishlist/item/$id"><img src=../img/$image alt="$image"></a>
+            <a href="/wishlist/item/$id"><img src=../img/$image alt="$image" width="350px"></a>
             </article>
 
         END;
@@ -125,32 +119,14 @@ class VueProprio{
 
         $html = "<article>";
 
-        $informations = explode(",", $infoListe);
-
-        // on affiche d abord les informations de la liste
-        foreach($informations as $value){
-
-            $cle = explode(":", $value);
-            $infos = explode("\"", $cle[1]);
-
-            if($cle[0] === "{\"no\""){
-                $html = $html . "<h1>Liste n°$cle[1]</h1>";
-            }
-            else if($cle[0] === "\"titre\""){
-                $html = $html . "<h2>$infos[1]</h2>";
-            }
-            else if($cle[0] === "\"expiration\""){
-                if(date("y.m.d") >= $infos[1]){
-                    $html = $html . "<p id=\"expire\">Cette liste etait valable jusqu au $infos[1]</p>";
-                }
-                else{
-                    $html = $html . "<p id=\"pasexpire\">La liste est encore disponible</p>";
-                }
-            }
-            else if($cle[0] != "\"token\""){
-                $html = $html . "<p>$infos[1]</p>";
-            }
-
+        $html = $html . "<h1>Liste n°$infoListe->no</h1>";
+        $html = $html . "<h2>$infoListe->titre</h2>";
+        $html = $html . "<p>$infoListe->description</p>";
+        if(date("y.m.d") >= $infoListe->expiration){
+            $html = $html . "<p id =\"expire\">Cette liste etait valable jusqu'au $infoListe->expiration</p>";
+        }
+        else{
+            $html = $html . "<p id=\"pasexpire\">Cette liste est encore disponible</p>";
         }
 
         $html = $html . "</article><article id=\"listeItem\">";

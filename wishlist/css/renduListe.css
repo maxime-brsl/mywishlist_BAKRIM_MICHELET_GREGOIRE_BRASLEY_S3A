@@ -1,0 +1,50 @@
+body{
+    color: white;
+    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+article{
+    box-shadow: 0px 0px 10px green;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+#expire{
+    text-decoration: underline;
+    color: red;
+}
+
+#pasexpire{
+    text-decoration: dashed;
+    color: green;
+}
+
+#listeItem{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+h1{
+    text-decoration: underline;
+    color: brown;
+    font-size: 30px;
+}
+
+h2{
+    color: violet;
+}
+
+a{
+    color: yellow;
+}
+
+a:hover{
+    color: green;
+}
+
+form{
+    box-shadow: 0px 0px 10px red;
+}

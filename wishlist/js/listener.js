@@ -1,9 +1,18 @@
-let boutonReserv = document.querySelector("#reservB");
+let boutonListe = document.querySelector("#blist");
+let boutonItem = document.querySelector("#bitem");
 
-boutonReserv.addEventListener("click", () => {
-    let msg = document.querySelector("#msg").value;
-    let nomItem = document.querySelector("#nomItem").textContent;
-    alert("Vous avez reserve l item : " + nomItem);
-    document.cookie = nomItem + "=" + msg;
-    window.location.reload();
+let formulaireItem = document.querySelector("#fitem");
+let formulaireListe = document.querySelector("#flist");
+
+formulaireItem.style.display = "none";
+formulaireListe.style.display = "none";
+
+boutonListe.addEventListener("click", () => {
+    formulaireListe.style.display = "block";
+});
+
+boutonItem.addEventListener("click", () => {
+
+    formulaireItem.style.display = "block";
+
 });
