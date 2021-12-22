@@ -45,7 +45,7 @@ $app->get('/liste/{token}',
     }
 );
 
-$app->get('/liste/{id}/item', 
+$app->get('/liste/{token}/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
         $name = $args['id'];
         $rp->getBody()->write("Hello, items de la liste n° $name");

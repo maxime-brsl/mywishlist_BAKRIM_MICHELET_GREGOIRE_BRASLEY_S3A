@@ -3,6 +3,9 @@
 namespace mywishlist\view;
 use \mywishlist\controleurs\ControleurParticipant;
 
+unset($_post['token']);
+unset($_post['iditem']);
+
 class VueParticipant{
 
     private static $renduPage = "";
@@ -57,7 +60,7 @@ class VueParticipant{
         // on met la zone de reservation que si l item est libre
         if(!isset($_COOKIE[$nomItem])){
             $v = new VueParticipant();
-            $zoneReserv = $v->ajouterZoneReservation();
+            $zoneReserv = $v->ajouterZoneReservation($nomItem);
             $contenu = $contenu . $zoneReserv;
         }
         else{
@@ -72,11 +75,11 @@ class VueParticipant{
      * l item n est pas reserve
      * @return string html contenant la zone de reservation
      */
-    private function ajouterZoneReservation(){
+    private function ajouterZoneReservation($nomItem){
 
         $html = <<<END
 
-        <form id="f1" method="POST" action="/wishlist/redirect.php">
+        <form id="f1" method="POST" action="/wishlist/redirect.php?nomItem=$nomItem">
                 <h2>Cet article n'est toujours pas reservé</h2>
                 <p>Peut-être voudriez vous remedier à ce problème ?</p>
                 <label for="f1_nom">Nom : </label>

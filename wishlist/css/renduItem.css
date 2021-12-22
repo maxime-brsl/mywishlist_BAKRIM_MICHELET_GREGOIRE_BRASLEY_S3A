@@ -19,10 +19,6 @@ h2{
     color: violet;
 }
 
-a{
-    color: yellow;
-}
-
-a:hover{
-    color: green;
+#planqueMoi{
+    display: none;
 }
