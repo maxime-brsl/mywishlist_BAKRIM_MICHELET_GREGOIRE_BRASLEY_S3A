@@ -3,9 +3,6 @@
 namespace mywishlist\view;
 use \mywishlist\controleurs\ControleurParticipant;
 
-unset($_post['token']);
-unset($_post['iditem']);
-
 class VueParticipant{
 
     private static $renduPage = "";

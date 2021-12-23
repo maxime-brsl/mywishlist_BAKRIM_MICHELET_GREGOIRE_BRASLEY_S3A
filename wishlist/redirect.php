@@ -20,11 +20,11 @@ if(isset($nomItem)){
     // enfin on redirige l utilisateur sur la page principale
     header("Location: http://localhost/wishlist/");
 }
-else if(isset($token)){
+else if(isset($_POST['token'])){
     // si le token est set cela indique que l on voulait aller sur une liste
     header("Location: http://localhost/wishlist/liste/$token");
 }
-else if(isset($iditem)){
+else if(isset($_POST['iditem'])){
     // si l iditem est set cela indique que l on voulait aller sur un item
     header("Location: http://localhost/wishlist/item/$iditem");
 }
