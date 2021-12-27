@@ -20,10 +20,20 @@ class ControleurParticipant{
      * @return mixed la page html de l item
      */
     public function page_un_item($rq, $rp, $args){
+        // on selectionne l item que l on veut dans la BDD
         $item_concerne = \mywishlist\models\Item::where('id', '=', $args['id'])->first();
-        
+        $token = \mywishlist\models\Liste::where('no', '=', $item_concerne->liste_id)->first()->token;
+
+        // on verifie si le token etait donnee dans l url
+        if(isset($args['token'])){
+            if($args['token'] !== $token){
+                $token = -1;
+            }
+        }
+
+        // on creer une vue pour afficher la page HTML
         $vue = new \mywishlist\view\VueParticipant();
-        $itemHTML = $vue->unItemHTML($item_concerne);
+        $itemHTML = $vue->unItemHTML($item_concerne, $token);
         $pageHTML = $vue->PageHTML($itemHTML);
 
         $rp->getBody()->write($pageHTML);

@@ -8,8 +8,4 @@ class Liste extends \Illuminate\Database\Eloquent\Model{
     protected $primarykey = 'no';
     public $timestamps = false;
 
-    public function items(){
-        return($this->hasMany('\models\Item', 'item_id'));
-    }
-
 }

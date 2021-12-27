@@ -29,6 +29,7 @@ if(!isset($_SESSION['typeGens'])){
 
 $app = new \Slim\App();
 
+
 $app->get('/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
 
@@ -38,8 +39,10 @@ $app->get('/item/{id}',
     }
 );
 
+
 $app->get('/liste/{token}', 
     function (Request $rq, Response $rp, $args):Response{
+
         $control = new \mywishlist\controleurs\ControleurParticipant($this);
         return($control->page_une_liste($rq, $rp, $args));
     }
@@ -47,9 +50,9 @@ $app->get('/liste/{token}',
 
 $app->get('/liste/{token}/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
-        $name = $args['id'];
-        $rp->getBody()->write("Hello, items de la liste n° $name");
-        return($rp);
+
+        $control = new \mywishlist\controleurs\ControleurParticipant($this);
+        return($control->page_un_item($rq, $rp, $args));
     }
 );
 
@@ -74,7 +77,7 @@ $app->get('/',
             <body>
 
                 <h1>Bondour !!!</h1>
-                <h2>Bienvenu sur le projet PHP wishlist d'un groupe d'étudiants</h2>
+                <h2>Bienvenue sur le projet PHP wishlist d'un groupe d'étudiants</h2>
                 
 
                 <article>
