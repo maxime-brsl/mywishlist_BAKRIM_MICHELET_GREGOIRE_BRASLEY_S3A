@@ -22,18 +22,19 @@ class ControleurParticipant{
     public function page_un_item($rq, $rp, $args){
         // on selectionne l item que l on veut dans la BDD
         $item_concerne = \mywishlist\models\Item::where('id', '=', $args['id'])->first();
-        $token = \mywishlist\models\Liste::where('no', '=', $item_concerne->liste_id)->first()->token;
-
+        
         // on verifie si le token etait donnee dans l url
         if(isset($args['token'])){
-            if($args['token'] !== $token){
-                $token = -1;
-            }
+            $liste = \mywishlist\models\Liste::where('token', '=', $args['token'])->first();
+        }
+        else{
+            // sinon on recupere la liste automatiquement 
+            $liste = \mywishlist\models\Liste::where('no', '=', $item_concerne->liste_id)->first();
         }
 
         // on creer une vue pour afficher la page HTML
         $vue = new \mywishlist\view\VueParticipant();
-        $itemHTML = $vue->unItemHTML($item_concerne, $token);
+        $itemHTML = $vue->unItemHTML($item_concerne, $liste);
         $pageHTML = $vue->PageHTML($itemHTML);
 
         $rp->getBody()->write($pageHTML);

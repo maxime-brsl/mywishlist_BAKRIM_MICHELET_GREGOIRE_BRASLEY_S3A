@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ce fichier permet d ajouter de maniere automatique un message publique sur une liste 
+ * ce fichier permet d ajouter de maniere automatique un message publique sur un item 
  * en filtrant les donnees recue lors d un transfert de formulaire 
  */
 
@@ -15,21 +15,28 @@ Eloquent::start('src/conf/conf.ini');
 try {
     //code...
     //on recupere le message du formulaire
-    $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
+    $message = filter_var($_POST['msg'], FILTER_SANITIZE_STRING);
     $nom = filter_var($_POST['nom'], FILTER_SANITIZE_STRING);
-    $liste = $_GET['no_liste'];
+    $no_liste = $_GET['no_liste'];
+    $iditem = $_GET['id_item'];
     $token = $_GET['token'];
+    $duree = $_GET['duree'];
+    $nomCookie = $_GET['nomCookie'];
 
     // on enregistre les donnees 
     $insertion = new \mywishlist\models\Message();
-    $insertion->no_liste = $liste;
-    $insertion->id_item = -1;
+    $insertion->no_liste = $no_liste;
+    $insertion->id_item = $iditem;
     $insertion->nom = $nom;
     $insertion->msg = $message;
     // on sauve le nouveau message dans la base de donnee
     $insertion->save();
+
+    // on set un cookie pour indiquer que la reservation est prise en compte
+    setcookie($nomCookie, "reserve", time() + $duree, "/");
+
     // enfin on redirige vers la page de la liste dont on vient
-    header("Location: http://localhost/wishlist/liste/$token");
+    header("Location: http://localhost/wishlist/item/$iditem");
 } catch (\Throwable $th) {
     echo $th;
 }

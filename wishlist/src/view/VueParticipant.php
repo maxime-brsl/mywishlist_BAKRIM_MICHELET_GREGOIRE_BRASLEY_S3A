@@ -7,7 +7,6 @@ use \DateTime;
 class VueParticipant{
 
     private static $renduPage = "";
-    private static $dureeEcheance = 0;
 
     /**
      * fonction qui permet de generer une page html a partir d un contenu
@@ -42,11 +41,13 @@ class VueParticipant{
      * @param string $tokenListe = token de la liste a la quelle appartient l item
      * @return mixed page HTML avec le contenu
      */
-    public function unItemHTML($infoItem, $tokenListe){
+    public function unItemHTML($infoItem, $liste){
 
         self::$renduPage = "renduItem.css";
+        $tokenListe = $liste->token;
 
-        if($tokenListe < 0){
+        // si le no de la liste est different de celui de l item on le fait savoir
+        if($liste->no != $infoItem->liste_id){
             $contenu = <<<END
 
                 <article>
@@ -61,7 +62,9 @@ class VueParticipant{
             return($contenu);
 
         }
-        else if($tokenListe == 0){
+
+        // si le liste_id d un item est a 0 cela indique qu il n appartient a aucune liste
+        if($infoItem->liste_id == 0){
             $contenu = <<<END
 
                 <article>
@@ -87,16 +90,47 @@ class VueParticipant{
 
         // on met des underscore au lieu des espaces pour gerer les cookies
         $nomItem = str_replace(" ", "_", $nomItem);
+        // le nom du cookie est compose du nom de l item et du token de la liste a la quelle 
+        // il appartient
+        $nomCookie = $nomItem.$tokenListe;
 
-        // on met la zone de reservation que si l item est libre
-        if(!isset($_COOKIE[$nomItem.$tokenListe])){
+        // cet condition n est pas la finale et permet juste de tester les reservations
+        // sur n importe quel liste
+        if(!isset($_COOKIE[$nomCookie])){
             $v = new VueParticipant();
-            $zoneReserv = $v->ajouterZoneReservation($nomItem.$tokenListe);
+            $zoneReserv = $v->ajouterZoneReservation($infoItem, $liste);
             $contenu = $contenu . $zoneReserv;
+        }
+        else{
+            $contenu = $contenu . "<div><p>L'item est deja reserve</p>";
+            $msg = \mywishlist\models\Message::where('no_liste', '=', $liste->no)->where('id_item', '=', $infoItem->id)->first();
+            if($msg->msg === ""){
+                $contenu = $contenu . "<p>$msg->nom a utilisé son droit au silence</p></div>";
+            }
+            else{
+                $contenu = $contenu . "<p>$msg->nom a dit : $msg->msg</p></div>";
+            }
+        }
+
+        /*
+
+        Ceci est la vrai condition a mettre en place une fois le projet termine
+
+        // on met la zone de reservation que si l item est libre et que 
+        // la liste est encore valable
+        if(!isset($_COOKIE[$nomItem.$tokenListe]) && date("y.m.d") < $liste->expiration){
+            $v = new VueParticipant();
+            $zoneReserv = $v->ajouterZoneReservation($nomItem.$tokenListe, $liste);
+            $contenu = $contenu . $zoneReserv;
+        }
+        else if(date("y.m.d") > $liste->expiration){
+            $contenu = $contenu . "<p>La liste est expiree donc on ne peut plus reserver l'item</p>";
         }
         else{
             $contenu = $contenu . "<p>L'item est deja reserve</p>";
         }
+
+        */
 
         return($contenu);
     }
@@ -104,15 +138,32 @@ class VueParticipant{
     /**
      * fonction qui permet de rajouter une zone de reservation si 
      * l item n est pas reserve
+     * @param mixed $item = item que l on veut reserver
+     * @param mixed $liste = liste a la quelle est lie l item
      * @return string html contenant la zone de reservation
      */
-    private function ajouterZoneReservation($nomItem){
+    private function ajouterZoneReservation($item, $liste){
 
-        $dureeCookie = self::$dureeEcheance;
+        // le nom de l item se compose de son nom et du token de sa liste
+        $nomCookie = $item->nom . $liste->token;
+        // on met des underscore au lieu des espaces pour gerer les cookies
+        $nomCookie = str_replace(" ", "_", $nomCookie);
+
+        // on recupere le numero de la liste ainsi que son token
+        $no_liste = $liste->no;
+        $token = $liste->token;
+
+        // le formulaire permettra aussi de set un cookie pour indiquer que l item est reserve
+        $dateCourante = new DateTime('now');
+        $dateEcheance = new DateTime($liste->expiration);
+        $intvl = $dateCourante->diff($dateEcheance);
         
+        // on calcul la duree du cookie de sorte qu il dure jusqu a l echeance de la liste
+        $duree = $intvl->y *365.25*24*60*60 + $intvl->m*30*24*60*60 + $intvl->d*24*60*60;
+
         $html = <<<END
         
-        <form id="f1" method="POST" action="/wishlist/redirect.php?nomItem=$nomItem&duree=3600">
+        <form id="f1" method="POST" action="/wishlist/AjouterMessageItem.php?nomCookie=$nomCookie&no_liste=$no_liste&token=$token&duree=$duree&id_item=$item->id">
                 <h2>Cet article n'est toujours pas reservé</h2>
                 <p>Peut-être voudriez vous remedier à ce problème ?</p>
                 <label for="f1_nom">Nom : </label>
@@ -124,48 +175,6 @@ class VueParticipant{
                 <button type="submit">Reserver</button>
         </form>
 
-        END;
-
-        return($html);
-    }
-
-    /**
-     * fonction qui permet d ajouter une zone de messages sur la liste
-     * il y aura un formulaire pour ajouter des messages 
-     * ainsi que les messages deja ecrits
-     * @param mixed $liste = liste sur la quelle ajouter cette zone de messages
-     * @return string zone html qui contient la zone de messages
-     */
-    private function ajouterZoneMessageListe($liste){
-
-        $no = $liste->no;
-        $token = $liste->token;
-
-        $messages = \mywishlist\models\Message::where('no_liste', '=', $no)->where('id_item', '<', 0)->get();
-        $msg = "";
-
-        // on recupere les messages deja ecrits 
-        foreach($messages as $v){
-            $msg = $msg . "<li>" . $v->msg . "</li>";
-        }
-
-        $html = <<<END
-
-        <article>
-
-        <h2>Les participants communiquent</h2>
-        <p>Ceci est le resultats de leurs dires</p>
-        $msg
-
-        </article>
-
-        <form id="f2" method="POST" action="/wishlist/AjouterMessageListe.php?no_liste=$no&token=$token">
-            <label for="f2_message">
-            <input type="text" name="message" required>
-            <button type="submit">Ajouter message</button>
-            
-            </form>
-        
         END;
 
         return($html);
@@ -218,12 +227,7 @@ class VueParticipant{
         }
         else{
             // sinon on met un message indiquant que la liste est encore dispo
-            $html = $html . "<p id=\"pasexpire\">Cette liste est encore disponible jusqu'au $infoListe->expiration</p>";
-            /**
-             * on calcul une duree de vie pour les cookies de reservation
-             * il dureront jusqu a ce que la liste ne soit plus disponible
-             */
-            self::$dureeEcheance = strtotime(date("y.m.d")) - strtotime($infoListe->expiration);            
+            $html = $html . "<p id=\"pasexpire\">Cette liste est encore disponible jusqu'au $infoListe->expiration</p>";           
         }
 
         $html = $html . "</article><article id=\"listeItem\">";
@@ -241,7 +245,52 @@ class VueParticipant{
         $html = $html . $temp->ajouterZoneMessageListe($infoListe);
 
         return($html);
+    }
 
+    /**
+     * fonction qui permet d ajouter une zone de messages sur la liste
+     * il y aura un formulaire pour ajouter des messages 
+     * ainsi que les messages deja ecrits
+     * @param mixed $liste = liste sur la quelle ajouter cette zone de messages
+     * @return string zone html qui contient la zone de messages
+     */
+    private function ajouterZoneMessageListe($liste){
+
+        $no = $liste->no;
+        $token = $liste->token;
+
+        $messages = \mywishlist\models\Message::where('no_liste', '=', $no)->where('id_item', '<', 0)->get();
+        $msg = "";
+
+        // on recupere les messages deja ecrits 
+        foreach($messages as $v){
+            $msg = $msg . "<li>" . $v->nom . " a écrit : " . $v->msg . "</li>";
+        }
+
+        $html = <<<END
+
+        <article>
+
+        <h2>Les participants communiquent</h2>
+        <p>Ceci est le resultats de leurs dires</p>
+        $msg
+
+        </article>
+
+        <form id="f2" method="POST" action="/wishlist/AjouterMessageListe.php?no_liste=$no&token=$token">
+            <label for"f2_nom">Votre nom : </label>
+            <input type="text" placeholder="Ce champ est nécessaire" name="nom" required>
+            </br>
+            <label for="f2_message">Votre message</label>
+            <input type="text" name="message" required>
+            </br>
+            <button type="submit">Ajouter message</button>
+            
+            </form>
+        
+        END;
+
+        return($html);
     }
 
 }
