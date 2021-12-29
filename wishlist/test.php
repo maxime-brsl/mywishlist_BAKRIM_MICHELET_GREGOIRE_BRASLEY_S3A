@@ -4,6 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 \mywishlist\bd\Eloquent::start("src/conf/conf.ini");
 
+/*
 $ligne = \mywishlist\models\Liste::get();
 
 // affichage de l ensemble des liste d items
@@ -57,3 +58,7 @@ if(isset($_GET['id'])){
 
 $ligne = \mywishlist\models\Liste::where('no', '=', 2)->first();
 echo $ligne;
+*/
+
+$msg = \mywishlist\models\Message::where('no_liste', '=', 1)->get();
+echo $msg;

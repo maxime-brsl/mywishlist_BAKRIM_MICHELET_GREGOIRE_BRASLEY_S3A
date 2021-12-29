@@ -130,6 +130,48 @@ class VueParticipant{
     }
 
     /**
+     * fonction qui permet d ajouter une zone de messages sur la liste
+     * il y aura un formulaire pour ajouter des messages 
+     * ainsi que les messages deja ecrits
+     * @param mixed $liste = liste sur la quelle ajouter cette zone de messages
+     * @return string zone html qui contient la zone de messages
+     */
+    private function ajouterZoneMessageListe($liste){
+
+        $no = $liste->no;
+        $token = $liste->token;
+
+        $messages = \mywishlist\models\Message::where('no_liste', '=', $no)->where('id_item', '<', 0)->get();
+        $msg = "";
+
+        // on recupere les messages deja ecrits 
+        foreach($messages as $v){
+            $msg = $msg . "<li>" . $v->msg . "</li>";
+        }
+
+        $html = <<<END
+
+        <article>
+
+        <h2>Les participants communiquent</h2>
+        <p>Ceci est le resultats de leurs dires</p>
+        $msg
+
+        </article>
+
+        <form id="f2" method="POST" action="/wishlist/AjouterMessageListe.php?no_liste=$no&token=$token">
+            <label for="f2_message">
+            <input type="text" name="message" required>
+            <button type="submit">Ajouter message</button>
+            
+            </form>
+        
+        END;
+
+        return($html);
+    }
+
+    /**
      * fonction qui permet de generer une page HTML d un item 
      * en moins detaille pour faire une liste 
      * @param string $contenu = le contenu de la page html
@@ -196,6 +238,7 @@ class VueParticipant{
 
         $html = $html . "</article>";
 
+        $html = $html . $temp->ajouterZoneMessageListe($infoListe);
 
         return($html);
 
