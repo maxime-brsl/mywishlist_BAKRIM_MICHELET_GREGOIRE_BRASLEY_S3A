@@ -78,14 +78,14 @@ class VueParticipant{
 
         $contenu = "<article>";
         $nomItem = $infoItem->nom;
-        $image = "<img src='/wishlist//img/$infoItem->img'>";
+        $image = "<img src='/wishlist/img/$infoItem->img'>";
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
         $contenu = $contenu . "<p>$infoItem->descr</p>";
         $contenu = $contenu . "<p>$infoItem->tarif €</p>";
         $contenu = $contenu . "<p>Cet item appartient a la liste de token $tokenListe</p>";
         
-        // on n oublie pas de mettre l image si on en a trouve une
+        // on n oublie pas de mettre l image 
         $contenu = $contenu . $image . "</article>";
 
         // on met des underscore au lieu des espaces pour gerer les cookies

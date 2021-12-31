@@ -2,9 +2,10 @@
 
 namespace mywishlist\controleurs;
 
-class ControleurParticipant{
+class ControleurParcours{
 
     private $container;
+    private $typeGens;
 
     /**
      * constructeur qui permet de specifier le container du controleur
@@ -12,6 +13,7 @@ class ControleurParticipant{
      */
     public function __construct($container){
         $this->container = $container;
+        $this->typeGens = $_SESSION['typeGens'];
     }
 
     /**
@@ -33,7 +35,13 @@ class ControleurParticipant{
         }
 
         // on creer une vue pour afficher la page HTML
-        $vue = new \mywishlist\view\VueParticipant();
+        if($this->typeGens === "participant"){
+            $vue = new \mywishlist\view\VueParticipant();
+        }
+        else if($this->typeGens === "proprio"){
+            $vue = new \mywishlist\view\VueProprio();
+        }
+        
         $itemHTML = $vue->unItemHTML($item_concerne, $liste);
         $pageHTML = $vue->PageHTML($itemHTML);
 
@@ -56,8 +64,14 @@ class ControleurParticipant{
         // on recupere les items de la liste de souhaits
         $items_liste = \mywishlist\models\Item::where('liste_id', '=', $liste_concernee->no)->get();
 
-        // on genere la page html
-        $vue = new \mywishlist\view\VueParticipant();
+        // on creer une vue pour afficher la page HTML
+        if($this->typeGens === "participant"){
+            $vue = new \mywishlist\view\VueParticipant();
+        }
+        else if($this->typeGens === "proprio"){
+            $vue = new \mywishlist\view\VueProprio();
+        }
+
         $listeHTML = $vue->uneListeHTML($liste_concernee, $items_liste);
         $pageHTML = $vue->PageHTML($listeHTML);
 
