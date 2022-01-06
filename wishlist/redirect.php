@@ -27,7 +27,13 @@ if(isset($nomItem) && $duree > 0){
 }
 else if(isset($_POST['token'])){
     // si le token est set cela indique que l on voulait aller sur une liste
-    header("Location: http://localhost/wishlist/liste/$token");
+    // en revanche il faut savoir si on veut ajouter un item ou juste consulter la liste
+    if(isset($_GET['ajout'])){
+        header("Location: http://localhost/wishlist/liste/$token/add/item");
+    }
+    else{
+        header("Location: http://localhost/wishlist/liste/$token");
+    }
 }
 else if(isset($_POST['iditem'])){
     // si l iditem est set cela indique que l on voulait aller sur un item

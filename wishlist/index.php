@@ -21,8 +21,8 @@ session_start();
  * lignes provisoires permettant de tester rapidement 
  * le POV participant et le POV proprietaire de liste
  */
-//$_SESSION['typeGens'] = "participant";
-$_SESSION['typeGens'] = "proprio";
+$_SESSION['typeGens'] = "participant";
+//$_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
 
@@ -50,6 +50,23 @@ $app->get('/liste/{token}/item/{id}',
 
         $control = new \mywishlist\controleurs\ControleurParcours($this);
         return($control->page_un_item($rq, $rp, $args));
+    }
+);
+
+/*********************************************
+ * 
+ * partie dediee a la modification de la BDD en dur : 
+ * Ajout de liste, items
+ * Modifications
+ * etc ...
+ * 
+ **********************************************/
+
+$app->get('/liste/{token}/add/item', 
+    function (Request $rq, Response $rp, $args):Response{
+
+        $control = new \mywishlist\controleurs\ControleurAjout($this);
+        return($control->genererFormulaireAjoutItem($rq, $rp, $args));
     }
 );
 
@@ -82,6 +99,7 @@ $app->get('/',
                     <div id="choix">
                         <button id="blist">Consulter une liste</button>
                         <button id="bitem">Consulter un item</button>
+                        <button id="bajoutitem">Ajouter un item a une liste</button>
                     </div>
                 </article>
 
@@ -95,6 +113,12 @@ $app->get('/',
                     <label>Token de la liste</label>
                     <input ="text" name="token">
                     <button type="submit">Chercher la liste</button>
+                </form>
+
+                <form id="fajoutitem" method="POST" action="/wishlist/redirect.php?ajout='oui'">
+                    <label>Token de la liste</label>
+                    <input ="text" name="token">
+                    <button type="submit">Valider la liste à la quelle ajouter un item</button>
                 </form>
                 
 

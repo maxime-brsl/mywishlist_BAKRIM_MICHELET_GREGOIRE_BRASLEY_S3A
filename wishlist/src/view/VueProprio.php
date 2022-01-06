@@ -76,7 +76,14 @@ class VueProprio{
 
         $contenu = "<article>";
         $nomItem = $infoItem->nom;
-        $image = "<img src='/wishlist/img/$infoItem->img'>";
+
+        // on verifie si l image de l item est un url ou non
+        if(str_contains($infoItem->img, "http")){
+            $image = "<img src='$infoItem->img'>";
+        }
+        else{
+            $image = "<img src='/wishlist/img/$infoItem->img'>";
+        }
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
         $contenu = $contenu . "<p>$infoItem->descr</p>";
@@ -155,13 +162,20 @@ class VueProprio{
 
         $contenu = $contenu . "<h1>$infoItem->nom</h1>";
         $id = $infoItem->id;
-        $image = $infoItem->img;
+
+        // on verifie si l image est un url ou une image stockee
+        if(str_contains($infoItem->img, "http")){
+            $image = $infoItem->img;
+        }
+        else{
+            $image = "/wishlist/img/" . $infoItem->img;
+        }
 
         // on met une miage avec un lien vers l item en question
         $contenu = <<<END
 
             $contenu
-            <a href="/wishlist/item/$id"><img src=/wishlist//img/$image alt="$image" width="350px"></a>
+            <a href="/wishlist/item/$id"><img src='$image' alt="$image" width="350px"></a>
             </article>
 
         END;

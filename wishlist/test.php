@@ -60,5 +60,3 @@ $ligne = \mywishlist\models\Liste::where('no', '=', 2)->first();
 echo $ligne;
 */
 
-$msg = \mywishlist\models\Message::where('no_liste', '=', 1)->get();
-echo $msg;
