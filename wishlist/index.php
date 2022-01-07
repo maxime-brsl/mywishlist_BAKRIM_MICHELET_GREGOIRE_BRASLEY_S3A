@@ -100,6 +100,7 @@ $app->get('/',
                         <button id="blist">Consulter une liste</button>
                         <button id="bitem">Consulter un item</button>
                         <button id="bajoutitem">Ajouter un item a une liste</button>
+                        <button id="baddlist">Ajouter une liste</button>
                     </div>
                 </article>
 
@@ -121,7 +122,16 @@ $app->get('/',
                     <button type="submit">Valider la liste à la quelle ajouter un item</button>
                 </form>
                 
-
+                <form id="faddlist" method="POST" action="/wishlist/AjouterListe.php">
+                    <label>Titre :</label>
+                    <input ="text" name="title">
+                    <label>Description :</label>
+                    <input ="text" name="desc">
+                    <label>Date d'expiration (YYYY-DD-MM) :</label>
+                    <input ="text" name="exp">
+                    <button type="submit">Ajouter la liste</button>
+                </form>
+                    
                 <script src="js/listener.js"></script>
             </body>
 
