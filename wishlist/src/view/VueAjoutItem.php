@@ -37,7 +37,7 @@ class VueAjoutItem{
             <label>Description de l'item :</label>
             <input ="text" name="descritem" placeholder="Ce champs est requis" required>
             </br>
-            <label>Prix de l'item :</label>
+            <label>Prix de l'item (maximum 999,99€):</label>
             <input ="number" name="prixitem" placeholder="Ce champs est requis" required>
             </br>
             <label>URL du magasin pour acheter l'item (optionel) :</label>
@@ -50,6 +50,7 @@ class VueAjoutItem{
             <input type="file" name="file_img" id="img">
             </br>
             <button type="submit">Confirmer l'ajout de l'item</button>
+            <input type="button" value="Retourner au Home" onClick="history.go(-1);">
         </form>
         
         END;
