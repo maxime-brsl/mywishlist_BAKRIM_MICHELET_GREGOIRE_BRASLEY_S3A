@@ -21,6 +21,7 @@ boutonListe.addEventListener("click", () => {
     formulaireItem.style.display = "none";
     formulaireAjoutItem.style.display = "none";
     formulaireAddListe.style.display = "none";
+    formulaireCreerCagnotte.style.display = "none";
 });
 
 boutonItem.addEventListener("click", () => {
@@ -28,6 +29,7 @@ boutonItem.addEventListener("click", () => {
     formulaireListe.style.display = "none";
     formulaireAjoutItem.style.display = "none";
     formulaireAddListe.style.display = "none";
+    formulaireCreerCagnotte.style.display = "none";
 });
 
 boutonAjoutItem.addEventListener("click", () => {
@@ -35,6 +37,7 @@ boutonAjoutItem.addEventListener("click", () => {
     formulaireListe.style.display = "none";
     formulaireAjoutItem.style.display = "block";
     formulaireAddListe.style.display = "none";
+    formulaireCreerCagnotte.style.display = "none";
 });
 
 boutonAddList.addEventListener("click", () => {
@@ -42,6 +45,7 @@ boutonAddList.addEventListener("click", () => {
     formulaireListe.style.display = "none";
     formulaireAjoutItem.style.display = "none";
     formulaireAddListe.style.display = "block";
+    formulaireCreerCagnotte.style.display = "none";
 });
 
 boutonCreerCagnotte.addEventListener("click", () => {
