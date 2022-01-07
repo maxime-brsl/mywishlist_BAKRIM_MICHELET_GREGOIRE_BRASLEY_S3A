@@ -35,8 +35,5 @@ boutonAjoutItem.addEventListener("click", () => {
 });
 
 boutonAddList.addEventListener("click", () => {
-    formulaireItem.style.display = "block";
-    formulaireListe.style.display = "block";
-    formulaireAjoutItem.style.display = "block";
     formulaireAddListe.style.display = "block";
 });
