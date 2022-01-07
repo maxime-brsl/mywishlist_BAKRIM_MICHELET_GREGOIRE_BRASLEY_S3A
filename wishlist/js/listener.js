@@ -2,16 +2,19 @@ let boutonListe = document.querySelector("#blist");
 let boutonItem = document.querySelector("#bitem");
 let boutonAjoutItem = document.querySelector("#bajoutitem");
 let boutonAddList = document.querySelector("#baddlist");
+let boutonCreerCagnotte = document.querySelector("#bcreercagnotte");
 
 let formulaireItem = document.querySelector("#fitem");
 let formulaireListe = document.querySelector("#flist");
 let formulaireAjoutItem = document.querySelector("#fajoutitem");
 let formulaireAddListe = document.querySelector("#faddlist");
+let formulaireCreerCagnotte = document.querySelector("#fcreercagnotte");
 
 formulaireItem.style.display = "none";
 formulaireListe.style.display = "none";
 formulaireAjoutItem.style.display = "none";
 formulaireAddListe.style.display = "none";
+formulaireCreerCagnotte.style.display = "none";
 
 boutonListe.addEventListener("click", () => {
     formulaireListe.style.display = "block";
@@ -39,4 +42,12 @@ boutonAddList.addEventListener("click", () => {
     formulaireListe.style.display = "none";
     formulaireAjoutItem.style.display = "none";
     formulaireAddListe.style.display = "block";
+});
+
+boutonCreerCagnotte.addEventListener("click", () => {
+    formulaireItem.style.display = "none";
+    formulaireListe.style.display = "none";
+    formulaireAjoutItem.style.display = "none";
+    formulaireAddListe.style.display = "none";
+    formulaireCreerCagnotte.style.display = "block";
 });

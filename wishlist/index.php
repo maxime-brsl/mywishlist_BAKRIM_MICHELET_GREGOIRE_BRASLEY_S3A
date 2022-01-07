@@ -101,6 +101,7 @@ $app->get('/',
                         <button id="bitem">Consulter un item</button>
                         <button id="bajoutitem">Ajouter un item a une liste</button>
                         <button id="baddlist">Ajouter une liste</button>
+                        <button id="bcreercagnotte">Créer une cagnotte</button>
                     </div>
                 </article>
 
@@ -130,6 +131,14 @@ $app->get('/',
                     <label>Date d'expiration (YYYY-DD-MM) :</label>
                     <input ="text" name="exp">
                     <button type="submit">Ajouter la liste</button>
+                </form>
+                
+                <form id="fcreercagnotte" method="POST">
+                    <label>ID de l'item :</label>
+                    <input ="text" name="id_item">
+                    <label>Montant :</label>
+                    <input ="text" name="prix">
+                    <button type="submit">Créer la cagnotte</button>
                 </form>
                     
                 <script src="js/listener.js"></script>
