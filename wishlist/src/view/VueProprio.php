@@ -2,6 +2,8 @@
 
 namespace mywishlist\view;
 
+use \DateTime;
+
 class VueProprio{
 
     private static $renduPage = "";
@@ -79,10 +81,10 @@ class VueProprio{
 
         // on verifie si l image de l item est un url ou non
         if(str_contains($infoItem->img, "http")){
-            $image = "<img src='$infoItem->img'>";
+            $image = "<img src='$infoItem->img' width='350px'>";
         }
         else{
-            $image = "<img src='/wishlist/img/$infoItem->img'>";
+            $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
         }
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
@@ -92,9 +94,13 @@ class VueProprio{
 
         // on n oublie pas de mettre l image
         $contenu = $contenu . $image . "</article>";
+
+        // on recupere les dates d expiration de la liste et la date du jour
+        $date_du_jour = new DateTime('now');
+        $date_expiration = new DateTime($liste->expiration);
         
         // si la liste n est pas expiree on ne met pas les messages sur l item
-        if($liste->expiration > date("y.m.d")){
+        if($date_du_jour < $date_expiration){
             $zone = <<<END
                 <article>
                     <p>
@@ -175,7 +181,7 @@ class VueProprio{
         $contenu = <<<END
 
             $contenu
-            <a href="/wishlist/item/$id"><img src='$image' alt="$image" width="350px"></a>
+            <a href="/wishlist/item/$id"><img src='$image' alt="image non disponible" width="350px"></a>
             </article>
 
         END;
@@ -193,6 +199,10 @@ class VueProprio{
 
         self::$renduPage = "renduListe.css";
 
+        // on recupere les dates d expiration de la liste et la date du jour
+        $date_du_jour = new DateTime('now');
+        $date_expiration = new DateTime($infoListe->expiration);
+
         $html = "<article>";
 
         $html = $html . "<h1>Liste n°$infoListe->no</h1>";
@@ -200,7 +210,7 @@ class VueProprio{
         $html = $html . "<p>$infoListe->description</p>";
 
         // si la liste est expiree on le fait savoir
-        if(date("y.m.d") >= $infoListe->expiration){
+        if($date_du_jour >= $date_expiration){
             $html = $html . "<p id =\"expire\">Cette liste etait valable jusqu'au $infoListe->expiration</p>";
         }
         else{
@@ -221,6 +231,15 @@ class VueProprio{
         $html = $html . "</article>";
 
         $html = $html . $temp->ajouterZoneMessageListe($infoListe);
+
+        // on rajoute le formulaire d ajout d item sur la liste
+        $html = $html . <<<END
+
+            <form id="fajoutitem" method="GET" action="/wishlist/liste/$infoListe->token/add/item">
+                <button type="submit">Rajouter un item à ma liste</button>
+            </form>
+
+        END;
 
         return($html);
     }

@@ -15,7 +15,7 @@ $prix_item = filter_var($_POST['prixitem'], FILTER_SANITIZE_NUMBER_FLOAT);
 $url = filter_var($_POST['url'], FILTER_SANITIZE_STRING);
 
 $nom_image = "no_image.jpg";
-var_dump($_FILES["file_img"]);
+//var_dump($_FILES["file_img"]);
 
 echo "</br></br>";
 
@@ -40,12 +40,12 @@ else if(isset($_FILES["file_img"])){
         if(in_array($image_type, $fichierAutorisee)){
 
             if(file_exists($repertoire . $image_name)){
-                // si le fichier existe deja on va faire la meme technique que Windows
+                // si le fichier existe deja on va faire un peu la meme technique que Windows
                 $indice = 1;
-                $nom_image = $image_name . '(' . $indice . ')';
+                $nom_image = '(' . $indice . ')' . $image_name;
                 while(file_exists($repertoire . $nom_image)){
                     $indice += 1;
-                    $nom_image = $image_name . '(' . $indice . ')';
+                    $nom_image = '(' . $indice . ')' . $image_name;
                 }
 
                 // on deplace le fichier vers le repertoire d images une fois le bon nom trouve

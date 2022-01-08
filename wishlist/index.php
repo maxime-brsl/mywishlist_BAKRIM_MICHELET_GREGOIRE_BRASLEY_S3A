@@ -21,8 +21,8 @@ session_start();
  * lignes provisoires permettant de tester rapidement 
  * le POV participant et le POV proprietaire de liste
  */
-$_SESSION['typeGens'] = "participant";
-//$_SESSION['typeGens'] = "proprio";
+//$_SESSION['typeGens'] = "participant";
+$_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
 
@@ -99,7 +99,6 @@ $app->get('/',
                     <div id="choix">
                         <button id="blist">Consulter une liste</button>
                         <button id="bitem">Consulter un item</button>
-                        <button id="bajoutitem">Ajouter un item a une liste</button>
                         <button id="baddlist">Ajouter une liste</button>
                         <button id="bcreercagnotte">Créer une cagnotte</button>
                     </div>
@@ -116,19 +115,13 @@ $app->get('/',
                     <input ="text" name="token">
                     <button type="submit">Chercher la liste</button>
                 </form>
-
-                <form id="fajoutitem" method="POST" action="/wishlist/redirect.php?ajout='oui'">
-                    <label>Token de la liste</label>
-                    <input ="text" name="token">
-                    <button type="submit">Valider la liste à la quelle ajouter un item</button>
-                </form>
                 
                 <form id="faddlist" method="POST" action="/wishlist/AjouterListe.php">
                     <label>Titre :</label>
                     <input ="text" name="title">
                     <label>Description :</label>
                     <input ="text" name="desc">
-                    <label>Date d'expiration (YYYY-DD-MM) :</label>
+                    <label>Date d'expiration (YYYY-MM-DD) :</label>
                     <input ="text" name="exp">
                     <button type="submit">Ajouter la liste</button>
                 </form>

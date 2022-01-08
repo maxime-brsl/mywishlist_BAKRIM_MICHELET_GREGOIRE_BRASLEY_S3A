@@ -81,10 +81,10 @@ class VueParticipant{
         // si l'image est une url on la met directement au lieu de chercher dans les images
         // stockees sur le serveur
         if(str_contains($infoItem->img, "http")){
-            $image = "<img src='$infoItem->img'>";
+            $image = "<img src='$infoItem->img' width='350px'>";
         }
         else{
-            $image = "<img src='/wishlist/img/$infoItem->img'>";
+            $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
         }
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
@@ -101,12 +101,19 @@ class VueParticipant{
         // il appartient
         $nomCookie = $nomItem.$tokenListe;
 
-        // cet condition n est pas la finale et permet juste de tester les reservations
-        // sur n importe quel liste
-        if(!isset($_COOKIE[$nomCookie])){
+        // on recupere les dates du jour et d expiration de la liste
+        $date_du_jour = new DateTime('now');
+        $date_expiration = new DateTime($infoListe->expiration);
+
+        // on met la zone de reservation que si l item est libre et que 
+        // la liste est encore valable
+        if(!isset($_COOKIE[$nomItem.$tokenListe]) && $date_du_jour < $date_expiration){
             $v = new VueParticipant();
             $zoneReserv = $v->ajouterZoneReservation($infoItem, $liste);
             $contenu = $contenu . $zoneReserv;
+        }
+        else if($date_du_jour >= $date_expiration){
+            $contenu = $contenu . "<p>La liste est expiree donc on ne peut plus reserver l'item</p>";
         }
         else{
             $contenu = $contenu . "<div><p>L'item est deja reserve</p>";
@@ -118,26 +125,6 @@ class VueParticipant{
                 $contenu = $contenu . "<p>$msg->nom a dit : $msg->msg</p></div>";
             }
         }
-
-        /*
-
-        Ceci est la vrai condition a mettre en place une fois le projet termine
-
-        // on met la zone de reservation que si l item est libre et que 
-        // la liste est encore valable
-        if(!isset($_COOKIE[$nomItem.$tokenListe]) && date("y.m.d") < $liste->expiration){
-            $v = new VueParticipant();
-            $zoneReserv = $v->ajouterZoneReservation($nomItem.$tokenListe, $liste);
-            $contenu = $contenu . $zoneReserv;
-        }
-        else if(date("y.m.d") > $liste->expiration){
-            $contenu = $contenu . "<p>La liste est expiree donc on ne peut plus reserver l'item</p>";
-        }
-        else{
-            $contenu = $contenu . "<p>L'item est deja reserve</p>";
-        }
-
-        */
 
         return($contenu);
     }
@@ -212,7 +199,7 @@ class VueParticipant{
         $contenu = <<<END
 
             $contenu
-            <a href="/wishlist/item/$id"><img src='$image' alt="$image" width="350px"></a>
+            <a href="/wishlist/item/$id"><img src='$image' alt="image non disponible" width="350px"></a>
             </article>
 
         END;
@@ -230,6 +217,11 @@ class VueParticipant{
 
         self::$renduPage = "renduListe.css";
 
+        // on recupere les dates du jour et d expiration de la liste
+        $date_du_jour = new DateTime('now');
+        $date_expiration = new DateTime($infoListe->expiration);
+
+        // on prepare la page html a generer
         $html = "<article>";
 
         $html = $html . "<h1>Liste n°$infoListe->no</h1>";
@@ -237,12 +229,12 @@ class VueParticipant{
         $html = $html . "<p>$infoListe->description</p>";
 
         // si la liste est expiree on le fait savoir
-        if(date("y.m.d") >= $infoListe->expiration){
+        if($date_du_jour >= $date_expiration){
             $html = $html . "<p id =\"expire\">Cette liste etait valable jusqu'au $infoListe->expiration</p>";
         }
         else{
             // sinon on met un message indiquant que la liste est encore dispo
-            $html = $html . "<p id=\"pasexpire\">Cette liste est encore disponible jusqu'au $infoListe->expiration</p>";           
+            $html = $html . "<p id=\"pasexpire\">Cette liste est encore disponible jusqu'au $infoListe->expiration</p>";
         }
 
         $html = $html . "</article><article id=\"listeItem\">";
