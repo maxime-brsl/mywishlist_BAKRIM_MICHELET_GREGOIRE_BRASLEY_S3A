@@ -84,7 +84,13 @@ class VueProprio{
             $image = "<img src='$infoItem->img' width='350px'>";
         }
         else{
-            $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
+            if(file_exists("img/" . $infoItem->img)){
+                $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
+            }
+            else{
+                $image = "<img src='/wishlist/img/no_image.jpg' width='350px'>";
+            }
+            
         }
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
@@ -98,6 +104,9 @@ class VueProprio{
         // on recupere les dates d expiration de la liste et la date du jour
         $date_du_jour = new DateTime('now');
         $date_expiration = new DateTime($liste->expiration);
+
+        // on prepare une variable temporaire pour appeler les methode de la classe
+        $temp = new VueProprio();
         
         // si la liste n est pas expiree on ne met pas les messages sur l item
         if($date_du_jour < $date_expiration){
@@ -113,10 +122,10 @@ class VueProprio{
             $contenu = $contenu . $zone;
         }
         else{
-            // sinon on en met un
-            $temp = new VueProprio();
             $contenu = $contenu . $temp->ajouterZoneMessage($liste, $infoItem);
         }
+
+        $contenu = $contenu . $temp->genererFormulaireGestionItem($infoItem, "item");
 
         return($contenu);
     }
@@ -174,7 +183,14 @@ class VueProprio{
             $image = $infoItem->img;
         }
         else{
-            $image = "/wishlist/img/" . $infoItem->img;
+            // si l image existe on est content
+            if(file_exists("img/" . $infoItem->img)){
+                $image = "/wishlist/img/" . $infoItem->img;
+            }
+            else{
+                // sinon on met une image par defaut
+                $image = "/wishlist/img/no_image.jpg";
+            }
         }
 
         // on met une miage avec un lien vers l item en question
@@ -233,15 +249,62 @@ class VueProprio{
         $html = $html . $temp->ajouterZoneMessageListe($infoListe);
 
         // on rajoute le formulaire d ajout d item sur la liste
-        $html = $html . <<<END
-
-            <form id="fajoutitem" method="GET" action="/wishlist/liste/$infoListe->token/add/item">
-                <button type="submit">Rajouter un item à ma liste</button>
-            </form>
-
-        END;
+        $html = $html . $temp->genererFormulaireGestionItem($infoListe, "liste");
 
         return($html);
+    }
+
+    /**
+     * fonction qui permet de generer un petit formulaire pour que le proprio gere sa liste
+     * @param mixed $objet = liste/item concernee
+     * @param string $tyeGestion = type de formulaire a generer 
+     *                          liste = formulaire pour ajouter un item 
+     *                          item = formulaire pour modifier/supprimer un item
+     * @return string formulaire html
+     */
+    private function genererFormulaireGestionItem($objet, $typeGestion){
+        if($typeGestion === "liste"){
+
+            $html = <<<END
+
+            <article>
+                Voulez vous modifier un peu votre liste ?
+                
+                <form id="fajoutitem" method="GET" action="/wishlist/liste/$objet->token/add/item">
+                <button type="submit">Rajouter un item à ma liste</button>
+                </form>
+
+            </article>
+
+            END;
+
+            return($html);
+        }
+        else if($typeGestion === "item"){
+            $html = <<<END
+
+            <article>
+                Voulez vous modifier un peu votre item ?
+
+                <form id="fmodifitem" method="GET" action="/wishlist/item/$objet->id/modify">
+                    <button type="submit">Modifier cet item</button>
+                </form>
+
+                <form id="fajoutitem" method="GET" action="/wishlist/droptitem.php?iditem=$objet->id">
+                    <button type="submit">Supprimer l'item de ma liste</button>
+                </form>
+
+            </article>
+
+
+            END;
+
+            return($html);
+        }
+        else{
+            return("");
+        }
+        
     }
 
     /**

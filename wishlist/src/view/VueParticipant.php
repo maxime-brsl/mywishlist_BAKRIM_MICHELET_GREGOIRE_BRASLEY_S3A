@@ -84,7 +84,12 @@ class VueParticipant{
             $image = "<img src='$infoItem->img' width='350px'>";
         }
         else{
-            $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
+            if(file_exists("img/".$infoItem->img)){
+                $image = "<img src='/wishlist/img/$infoItem->img' width='350px'>";
+            }
+            else{
+                $image = "<img src='/wishlist/img/no_image.jpg' width='350px'>";
+            }
         }
 
         $contenu = $contenu . "<h1>$nomItem</h1>";
@@ -103,7 +108,7 @@ class VueParticipant{
 
         // on recupere les dates du jour et d expiration de la liste
         $date_du_jour = new DateTime('now');
-        $date_expiration = new DateTime($infoListe->expiration);
+        $date_expiration = new DateTime($liste->expiration);
 
         // on met la zone de reservation que si l item est libre et que 
         // la liste est encore valable
@@ -192,7 +197,12 @@ class VueParticipant{
             $image = $infoItem->img;
         }
         else{
-            $image = "/wishlist/img/" . $infoItem->img;
+            if(file_exists("img/" . $infoItem->img)){
+                $image = "/wishlist/img/" . $infoItem->img;
+            }
+            else{
+                $image = "/wishlist/img/no_image.jpg";
+            }
         }
 
         // on met une miage avec un lien vers l item en question

@@ -21,7 +21,7 @@ session_start();
  * lignes provisoires permettant de tester rapidement 
  * le POV participant et le POV proprietaire de liste
  */
-//$_SESSION['typeGens'] = "participant";
+$_SESSION['typeGens'] = "participant";
 $_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
@@ -65,8 +65,15 @@ $app->get('/liste/{token}/item/{id}',
 $app->get('/liste/{token}/add/item', 
     function (Request $rq, Response $rp, $args):Response{
 
-        $control = new \mywishlist\controleurs\ControleurAjout($this);
+        $control = new \mywishlist\controleurs\ControleurGestion($this);
         return($control->genererFormulaireAjoutItem($rq, $rp, $args));
+    }
+);
+
+$app->get('/item/{iditem}/modify', 
+    function (Request $rq, Response $rp, $args):Response{
+        $control = new \mywishlist\controleurs\ControleurGestion($this);
+        return($control->genererForulaireModificationItem($rq, $rp, $args));
     }
 );
 

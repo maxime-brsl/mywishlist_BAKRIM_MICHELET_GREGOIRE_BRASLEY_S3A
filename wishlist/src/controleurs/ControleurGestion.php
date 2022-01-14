@@ -1,7 +1,7 @@
 <?php
 namespace mywishlist\controleurs;
 
-class ControleurAjout{
+class ControleurGestion{
 
     private $container;
 
@@ -18,11 +18,29 @@ class ControleurAjout{
         $liste = \mywishlist\models\Liste::where('token', '=', $args['token'])->first();
 
         // on va generer le formulaire de la page pour ajouter un item
-        $vue = new \mywishlist\view\VueAjoutItem();
+        $vue = new \mywishlist\view\VueGestionItem();
         $form = $vue->formulaireReservation($liste);
         $pageHTML = $vue->pageHTML($form);
         
         // on ecrit ce formulaire dans la page html 
+        $rp->getBody()->write($pageHTML);
+        return($rp);
+    }
+
+    /**
+     * fonction qui permet de generer le formulaire de modification d un item
+     */
+    public function genererForulaireModificationItem($rq, $rp, $args){
+
+        // on recupere l'item concerne par cette modification
+        $item = \mywishlist\models\Item::where('id', '=', $args['iditem'])->first();
+
+        // on va generer le formulaire 
+        $vue = new \mywishlist\view\VueGestionItem();
+        $form = $vue->formulaireModificationItem($item);
+        $pageHTML = $vue->pageHTML($form);
+
+        // on ecrit ce formulaire
         $rp->getBody()->write($pageHTML);
         return($rp);
     }
