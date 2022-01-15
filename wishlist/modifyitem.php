@@ -86,9 +86,14 @@ try {
     if($url != $item->url){
         $item->url = $url;
     }
-    if($nom_image != "no_image"){
-        // on supprime l'ancienne image
-        unlink("img/" . $item->img);
+    if($nom_image != "no_image.jpg"){
+
+        // on supprime l'ancienne image si personne ne s en sert
+        $items = \mywishlist\models\Item::where('img', '=', $item->img)->get();
+        if($items->count() === 1){
+            unlink("img/" . $item->img);
+        }
+
         // et on met la nouvelle
         $item->img = $nom_image;
     }

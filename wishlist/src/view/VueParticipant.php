@@ -131,6 +131,9 @@ class VueParticipant{
             }
         }
 
+        // on rajoute un petit bouton pour retourner rapidement a la liste
+        $contenu = $contenu . "<a href=\"/wishlist/liste/$liste->token\"><button>Retourner à la liste</button></a>";
+
         return($contenu);
     }
 

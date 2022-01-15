@@ -83,7 +83,10 @@ $item->id = \mywishlist\models\Item::max('id') + 1;
 
 // on peut enfin sauvegarder l item
 $item->save();
-header('Location: http://localhost/wishlist');
+
+// on recupere la liste liee
+$liste = \mywishlist\models\Liste::where('no', '=', $no_liste)->first();
+header("Location: http://localhost/wishlist/liste/$liste->token");
 exit();
 
 ?>

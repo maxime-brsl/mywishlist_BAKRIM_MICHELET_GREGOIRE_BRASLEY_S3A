@@ -125,7 +125,11 @@ class VueProprio{
             $contenu = $contenu . $temp->ajouterZoneMessage($liste, $infoItem);
         }
 
+        // on rajoute le formulaire de gestion des items qui permet de modifier/supprimer un item
         $contenu = $contenu . $temp->genererFormulaireGestionItem($infoItem, "item");
+
+        // on rajoute un petit bouton pour retourner a la liste
+        $contenu = $contenu . "<a href=\"/wishlist/liste/$liste->token\"><button>Retourner à la liste</button></a>";
 
         return($contenu);
     }
@@ -281,16 +285,18 @@ class VueProprio{
             return($html);
         }
         else if($typeGestion === "item"){
+
             $html = <<<END
 
             <article>
                 Voulez vous modifier un peu votre item ?
 
-                <form id="fmodifitem" method="GET" action="/wishlist/item/$objet->id/modify">
+                <form id="fmodifitem" action="/wishlist/item/$objet->id/modify">
                     <button type="submit">Modifier cet item</button>
                 </form>
 
-                <form id="fajoutitem" method="GET" action="/wishlist/droptitem.php?iditem=$objet->id">
+                <form id="fdeleteitem" method="POST" action="/wishlist/dropitem.php?id_item=$objet->id">
+                    <input name='useless' hidden>
                     <button type="submit">Supprimer l'item de ma liste</button>
                 </form>
 
