@@ -108,7 +108,11 @@ class VueProprio{
         $contenu = $contenu . $temp->ajouterZoneMessage($liste, $infoItem);
 
         // on rajoute le formulaire de gestion des items qui permet de modifier/supprimer un item
-        $contenu = $contenu . $temp->genererFormulaireGestionItem($infoItem, "item");
+        // uniquement si l item n est pas reserve
+        $message = \mywishlist\models\Message::where('no_liste', '=', $liste->no)->where('id_item', '=', $infoItem->id)->first();
+        if(!isset($message)){
+            $contenu = $contenu . $temp->genererFormulaireGestion($infoItem, "item");
+        }
 
         // on rajoute un petit bouton pour retourner a la liste
         $contenu = $contenu . "<a href=\"/wishlist/liste/$liste->token\"><button>Retourner à la liste</button></a>";
@@ -251,7 +255,7 @@ class VueProprio{
         $html = $html . $temp->ajouterZoneMessageListe($infoListe);
 
         // on rajoute le formulaire d ajout d item sur la liste
-        $html = $html . $temp->genererFormulaireGestionItem($infoListe, "liste");
+        $html = $html . $temp->genererFormulaireGestion($infoListe, "liste");
 
         // on rajoute un petit bouton pour retourner au menu
         $html = $html . "<a href=\"/wishlist/\"><button>Retourner au main</button></a>";
@@ -267,7 +271,7 @@ class VueProprio{
      *                          item = formulaire pour modifier/supprimer un item
      * @return string formulaire html
      */
-    private function genererFormulaireGestionItem($objet, $typeGestion){
+    private function genererFormulaireGestion($objet, $typeGestion){
         if($typeGestion === "liste"){
 
             $html = <<<END

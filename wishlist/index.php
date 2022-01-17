@@ -21,7 +21,7 @@ session_start();
  * lignes provisoires permettant de tester rapidement 
  * le POV participant et le POV proprietaire de liste
  */
-$_SESSION['typeGens'] = "participant";
+//$_SESSION['typeGens'] = "participant";
 $_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();

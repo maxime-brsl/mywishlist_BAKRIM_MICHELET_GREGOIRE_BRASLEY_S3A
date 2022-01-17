@@ -102,9 +102,11 @@ class VueParticipant{
 
         // on met des underscore au lieu des espaces pour gerer les cookies
         $nomItem = str_replace(" ", "_", $nomItem);
-        // le nom du cookie est compose du nom de l item et du token de la liste a la quelle 
+
+        // le nom du cookie est compose du nom de l id item de l item et 
+        // du token de la liste a la quelle 
         // il appartient
-        $nomCookie = $nomItem.$tokenListe;
+        $nomCookie = $infoItem->id . $nomItem . $tokenListe;
 
         // on recupere les dates du jour et d expiration de la liste
         $date_du_jour = new DateTime('now');
@@ -112,7 +114,7 @@ class VueParticipant{
 
         // on met la zone de reservation que si l item est libre et que 
         // la liste est encore valable
-        if(!isset($_COOKIE[$nomItem.$tokenListe]) && $date_du_jour < $date_expiration){
+        if(!isset($_COOKIE[$nomCookie]) && $date_du_jour < $date_expiration){
             $v = new VueParticipant();
             $zoneReserv = $v->ajouterZoneReservation($infoItem, $liste);
             $contenu = $contenu . $zoneReserv;
@@ -147,7 +149,7 @@ class VueParticipant{
     private function ajouterZoneReservation($item, $liste){
 
         // le nom de l item se compose de son nom et du token de sa liste
-        $nomCookie = $item->nom . $liste->token;
+        $nomCookie = $item->id . $item->nom . $liste->token;
         // on met des underscore au lieu des espaces pour gerer les cookies
         $nomCookie = str_replace(" ", "_", $nomCookie);
 
