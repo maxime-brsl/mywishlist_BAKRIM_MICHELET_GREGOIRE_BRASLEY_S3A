@@ -50,9 +50,10 @@ class VueGestionItem{
             <input type="file" name="file_img" id="img">
             </br>
             <button type="submit">Confirmer l'ajout de l'item</button>
-            <input type="button" value="Retourner au Home" onClick="history.go(-1);">
         </form>
-        
+
+        <a href="/wishlist/liste/$liste->token"><button>Retourner à ma liste</button></a>
+            
         END;
 
         return($html);

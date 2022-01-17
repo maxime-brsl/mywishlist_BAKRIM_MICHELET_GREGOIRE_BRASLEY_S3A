@@ -101,29 +101,11 @@ class VueProprio{
         // on n oublie pas de mettre l image
         $contenu = $contenu . $image . "</article>";
 
-        // on recupere les dates d expiration de la liste et la date du jour
-        $date_du_jour = new DateTime('now');
-        $date_expiration = new DateTime($liste->expiration);
-
         // on prepare une variable temporaire pour appeler les methode de la classe
         $temp = new VueProprio();
         
-        // si la liste n est pas expiree on ne met pas les messages sur l item
-        if($date_du_jour < $date_expiration){
-            $zone = <<<END
-                <article>
-                    <p>
-                        Votre liste n'est pas encore arrivé a expiration. </br>
-                        Soyez patient, vous saurez si vous avez eu votre item une fois la liste expirée.
-                    </p>
-                </article>
-            END;
-
-            $contenu = $contenu . $zone;
-        }
-        else{
-            $contenu = $contenu . $temp->ajouterZoneMessage($liste, $infoItem);
-        }
+        // on met la zone concernant la reservatin de l item
+        $contenu = $contenu . $temp->ajouterZoneMessage($liste, $infoItem);
 
         // on rajoute le formulaire de gestion des items qui permet de modifier/supprimer un item
         $contenu = $contenu . $temp->genererFormulaireGestionItem($infoItem, "item");
@@ -142,20 +124,36 @@ class VueProprio{
      * @return string morceau html qui contient les infos necessaires
      */
     private function ajouterZoneMessage($liste, $item){
+
+        // on recupere les dates d expiration de la liste et la date du jour
+        $date_du_jour = new DateTime('now');
+        $date_expiration = new DateTime($liste->expiration);
         
         $message = \mywishlist\models\Message::where('no_liste', '=', $liste->no)->where('id_item', '=', $item->id)->first();
         $msg = "";
 
-        // si il n y a pas de nom c que l item n a pas ete reserve car le nom est 
-        // obligatoire pour envoyer le formulaire
-        if($message->nom === null){
-            $msg = "Sniff, personne n'a voulu vous faire plaisir et n'a pris votre item.";
-        }
-        else if($message->msg === ""){
-            $msg = "Vous allez avoir votre item ^^. </br>" . $message->nom . " n'a rien écrit quand il a reservé";
+        // si la liste n est pas a echeance on ne met que si l item est resrve ou non
+        if($date_du_jour < $date_expiration){
+            
+            if(!isset($message)){
+                $msg = "Votre item n'est toujours pas reservé.";
+            }
+            else{
+                $msg = "Oh, on dirait qu'une âme charitable s'est portée volontaire ^^.";
+            }
         }
         else{
-            $msg = "Vous allez avoir votre item ^^. </br>" . $message->nom . " a écrit \"" . $message->msg . "\" quand il a reservé";
+
+            // sinon on met un petit message avec toutes les informations necessaires
+            if(!isset($message)){
+                $msg = "Sniff, personne n'a voulu vous faire plaisir et n'a pris votre item.";
+            }
+            else if($message->msg === ""){
+                $msg = "Vous allez avoir votre item ^^. </br>" . $message->nom . " n'a rien écrit quand il a reservé";
+            }
+            else{
+                $msg = "Vous allez avoir votre item ^^. </br>" . $message->nom . " a écrit \"" . $message->msg . "\" quand il a reservé";
+            }
         }
 
 
@@ -254,6 +252,9 @@ class VueProprio{
 
         // on rajoute le formulaire d ajout d item sur la liste
         $html = $html . $temp->genererFormulaireGestionItem($infoListe, "liste");
+
+        // on rajoute un petit bouton pour retourner au menu
+        $html = $html . "<a href=\"/wishlist/\"><button>Retourner au main</button></a>";
 
         return($html);
     }
