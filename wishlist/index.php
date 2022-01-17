@@ -106,7 +106,7 @@ $app->get('/',
                 <h2>Bienvenue sur le projet MyWishList d'un groupe de 4 étudiants, réalisé en PHP</h2>
                 
                 <p>
-                Ce projet consiste à la gestion de liste de souhait. </br>
+                Ce projet consiste à la gestion de listes de souhaits. </br>
                 Un participant à une liste pourra réserver un item, tandis que le propriétaire d'une 
                 liste pourra ajouter des items, les modifier si ils ne sont pas encore réservés, etc ...
                 </p>
