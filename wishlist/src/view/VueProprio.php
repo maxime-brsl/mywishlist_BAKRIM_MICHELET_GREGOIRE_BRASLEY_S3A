@@ -219,8 +219,12 @@ class VueProprio{
      */
     public function uneListeHTML($infoListe, $items){
 
+        
         self::$renduPage = "renduListe.css";
-
+        if(!isset($infoListe)){
+            return("<h2>Cette liste n'existe pas</h2>");
+        }
+        
         // on recupere les dates d expiration de la liste et la date du jour
         $date_du_jour = new DateTime('now');
         $date_expiration = new DateTime($infoListe->expiration);

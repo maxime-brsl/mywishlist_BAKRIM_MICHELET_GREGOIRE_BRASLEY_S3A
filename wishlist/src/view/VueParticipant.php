@@ -232,6 +232,10 @@ class VueParticipant{
 
         self::$renduPage = "renduListe.css";
 
+        if(!isset($infoListe)){
+            return("<h2>Cette liste n'existe pas</h2>");
+        }
+
         // on recupere les dates du jour et d expiration de la liste
         $date_du_jour = new DateTime('now');
         $date_expiration = new DateTime($infoListe->expiration);
