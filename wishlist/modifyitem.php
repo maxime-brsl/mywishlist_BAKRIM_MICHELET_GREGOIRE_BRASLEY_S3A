@@ -69,42 +69,36 @@ else if(isset($_FILES["file_img"])){
     }
 }
 
-try {
-    //code...
-    // une fois les donnees recuperees et filtrees on peut les modifier dans la table
-    $item = \mywishlist\models\Item::where('id', '=', $id_item)->first();
-    // on verifie chaque attribut pour ne modifier que ce qui a ete reellement change
-    if($nom_item != ""){
-        $item->nom = $nom_item;
-    }
-    if($descr_item != ""){
-        $item->descr = $descr_item;
-    }
-    if($prix_item != "" && $prix_item != $item->tarif){
-        $item->tarif = $prix_item;
-    }
-    if($url != $item->url){
-        $item->url = $url;
-    }
-    if($nom_image != "no_image.jpg"){
+// une fois les donnees recuperees et filtrees on peut les modifier dans la table
+$item = \mywishlist\models\Item::where('id', '=', $id_item)->first();
+// on verifie chaque attribut pour ne modifier que ce qui a ete reellement change
+if($nom_item != ""){
+    $item->nom = $nom_item;
+}
+if($descr_item != ""){
+    $item->descr = $descr_item;
+}
+if($prix_item != "" && $prix_item != $item->tarif){
+    $item->tarif = $prix_item;
+}
+if($url != $item->url){
+    $item->url = $url;
+}
+if($nom_image != "no_image.jpg"){
 
-        // on supprime l'ancienne image si personne ne s en sert
-        $items = \mywishlist\models\Item::where('img', '=', $item->img)->get();
-        if($items->count() === 1){
-            unlink("img/" . $item->img);
-        }
-
-        // et on met la nouvelle
-        $item->img = $nom_image;
+    // on supprime l'ancienne image si personne ne s en sert
+    $items = \mywishlist\models\Item::where('img', '=', $item->img)->get();
+    if($items->count() === 1){
+        unlink("img/" . $item->img);
     }
-    
-    // on peut enfin sauvegarder l item
-    $item->save();
-    header("Location: http://localhost/wishlist/item/$id_item");
-    exit();
-} catch (\Throwable $th) {
-    echo $th;
+
+    // et on met la nouvelle
+    $item->img = $nom_image;
 }
 
+// on peut enfin sauvegarder l item
+$item->save();
+header("Location: http://localhost/wishlist/item/$id_item");
+exit();
 
 ?>

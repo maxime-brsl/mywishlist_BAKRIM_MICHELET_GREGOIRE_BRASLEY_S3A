@@ -26,6 +26,11 @@ $_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
 
+/****************************************
+ * 
+ * Partie dediee a la navigation au sein du site 
+ * 
+ *****************************************/
 
 $app->get('/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
@@ -55,7 +60,7 @@ $app->get('/liste/{token}/item/{id}',
 
 /*********************************************
  * 
- * partie dediee a la modification de la BDD en dur : 
+ * partie dediee a la modification des informations/contenu : 
  * Ajout de liste, items
  * Modifications
  * etc ...
@@ -97,9 +102,14 @@ $app->get('/',
             </head>
             <body>
 
-                <h1>Bondour !!!</h1>
-                <h2>Bienvenue sur le projet PHP wishlist d'un groupe d'étudiants</h2>
+                <h1>MyWishList</h1>
+                <h2>Bienvenue sur le projet MyWishList d'un groupe de 4 étudiants, réalisé en PHP</h2>
                 
+                <p>
+                Ce projet consiste à la gestion de liste de souhait. </br>
+                Un participant à une liste pourra réserver un item, tandis que le propriétaire d'une 
+                liste pourra ajouter des items, les modifier si ils ne sont pas encore réservés, etc ...
+                </p>
 
                 <article>
                     <h3>Que voulez vous faire ?</h3>
@@ -140,6 +150,8 @@ $app->get('/',
                     <input ="text" name="prix">
                     <button type="submit">Créer la cagnotte</button>
                 </form>
+
+                <a href="/wishlist/credits.php"><button>Crédits</button></a>
                     
                 <script src="js/listener.js"></script>
             </body>
