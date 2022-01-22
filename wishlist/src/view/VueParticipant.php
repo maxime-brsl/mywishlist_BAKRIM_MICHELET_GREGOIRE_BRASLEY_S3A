@@ -304,7 +304,7 @@ class VueParticipant{
         </article>
 
         <form id="f2" method="POST" action="/wishlist/AjouterMessageListe.php?no_liste=$no&token=$token">
-            <label for"f2_nom">Votre nom : </label>
+            <label for"f2_nom">Votre nom (ou pseudo si vous préférez rester anonyme) : </label>
             <input type="text" placeholder="Ce champ est nécessaire" name="nom" required>
             </br>
             <label for="f2_message">Votre message</label>
