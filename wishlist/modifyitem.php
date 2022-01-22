@@ -15,8 +15,7 @@ $descr_item = filter_var($_POST['descritem'], FILTER_SANITIZE_STRING);
 $prix_item = filter_var($_POST['prixitem'], FILTER_SANITIZE_NUMBER_FLOAT);
 $url = filter_var($_POST['url'], FILTER_SANITIZE_STRING);
 
-$nom_image = "no_image.jpg";
-//var_dump($_FILES["file_img"]);
+$nom_image = "";
 
 // on verifie si une url a ete passe pour l image
 // on privilegie les url aux upload pour le moment car plus simple
@@ -84,12 +83,14 @@ if($prix_item != "" && $prix_item != $item->tarif){
 if($url != $item->url){
     $item->url = $url;
 }
-if($nom_image != "no_image.jpg"){
+if($nom_image != ""){
 
-    // on supprime l'ancienne image si personne ne s en sert
-    $items = \mywishlist\models\Item::where('img', '=', $item->img)->get();
-    if($items->count() === 1){
-        unlink("img/" . $item->img);
+    // on supprime l'ancienne image si personne d autre ne s en sert et si ce n est pas l image vide
+    if($item->img != "no_image.jpg"){
+        $items = \mywishlist\models\Item::where('img', '=', $item->img)->get();
+        if($items->count() === 1){
+            unlink("img/" . $item->img);
+        }
     }
 
     // et on met la nouvelle

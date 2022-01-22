@@ -27,7 +27,7 @@ class VueGestionItem{
      * @param mixed $liste = liste concernee par l ajout d item
      * @return string morceau html contenant le formulaire
      */
-    public function formulaireReservation($liste){
+    public function forumaireAjoutItem($liste){
         $html = <<<END
 
         <form id="fajoutvitem" method="POST" enctype="multipart/form-data" action="/wishlist/additem.php?no_liste=$liste->no">
@@ -83,11 +83,11 @@ class VueGestionItem{
             <label>Vous pouvez également ajouter une image avec l'url de l'image : </label>
             <input type="text" name="url_img" id="img">
             </br>
-            <label>Uploader une image : </label>
+            <label>Uploader une image (Toute nouvelle image supprimera l'ancienne si aucun autre item ne s'en sert) : </label>
             <input type="file" name="file_img" id="img">
             </br>
             <button type="submit">Confirmer les modifications de l'item</button>
-            <input type="button" value="Retourner au Home" onClick="history.go(-1);">
+            <input type="button" value="Retourner à ma liste" onClick="history.go(-1);">
         </form>
         
         END;

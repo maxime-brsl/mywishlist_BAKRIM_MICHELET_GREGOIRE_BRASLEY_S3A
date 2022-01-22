@@ -19,7 +19,7 @@ class ControleurGestion{
 
         // on va generer le formulaire de la page pour ajouter un item
         $vue = new \mywishlist\view\VueGestionItem();
-        $form = $vue->formulaireReservation($liste);
+        $form = $vue->forumaireAjoutItem($liste);
         $pageHTML = $vue->pageHTML($form);
         
         // on ecrit ce formulaire dans la page html 
