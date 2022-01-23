@@ -9,28 +9,29 @@ require_once __DIR__ . '../../vendor/autoload.php';
 use mywishlist\bd\Eloquent;
 Eloquent::start('../src/conf/conf.ini');
 if (isset($_REQUEST['username'], $_REQUEST['password'])){
-   try {
        $usr = $_REQUEST['username'];
        $pwd = $_REQUEST['password'];
        $pwdv = $_REQUEST['passwordverif'];
-       if($pwd === $pwdv){
-           $register = new \mywishlist\models\Utilisateurs();
-           $register->username = $usr;
-           $register->password = hash('sha256', $pwd);
-           $register->save();
-           echo "<div class='sucess'>
+       $verif = \mywishlist\models\Utilisateurs::where('username', '=', $usr)->first();
+       if(!isset($verif)) {
+           if ($pwd === $pwdv) {
+               $register = new \mywishlist\models\Utilisateurs();
+               $register->username = $usr;
+               $register->password = hash('sha256', $pwd);
+               $register->save();
+               echo "<div class='sucess'>
                  <h3>Vous êtes inscrits avec succès.</h3>
            </div>";
-           sleep(2);
+               sleep(2);
                header("Location: http://localhost/wishlist/");
+           } else {
+               $message = "Le mot de passe est different dans le champ de confirmation";
+           }
        }
        else{
-           $message = "Le mot de passe est different dans le champ de confirmation";
+           $message = "L'utilisateur existe deja.";
        }
-   }
-   catch(Exception $e){
-       $message = "L'utilisateur existe deja.";
-   }
+
 }
     ?>
     <form class="box" action="" method="post">

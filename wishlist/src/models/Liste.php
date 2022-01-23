@@ -22,4 +22,8 @@ class Liste extends \Illuminate\Database\Eloquent\Model{
     protected $primarykey = 'no';
     public $timestamps = false;
 
+    public function utilisateur(){
+        return($this->belongsTo('\mywishlist\models\Utilisateurs', 'id'));
+    }
+
 }

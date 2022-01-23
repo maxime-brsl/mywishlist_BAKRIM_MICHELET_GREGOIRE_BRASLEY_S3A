@@ -29,6 +29,8 @@ class VueAuthentification{
                             <button id="bitem">Consulter un item</button>
                             <button id="baddlist">Ajouter une liste</button>
                             <button id="bcreercagnotte">Créer une cagnotte</button>
+                            <button id="bjoindrelist">Joindre une liste</button>
+                            <button><a href="/wishlist/Authentification/Listecreateurs.php">Voir la liste des createurs</a></button>
                         </div>
                     </article>
     
@@ -42,6 +44,12 @@ class VueAuthentification{
                         <label>Token de la liste</label>
                         <input ="text" name="token">
                         <button type="submit" class="action">Chercher la liste</button>
+                    </form>
+                    
+                    <form id="flistjoin" method="POST" action="/wishlist/Authentification/JoindreListe.php">
+                        <label>Token de la liste</label>
+                        <input ="text" name="token">
+                        <button type="submit" class="action">Joindre la liste</button>
                     </form>
                     
                     <form id="faddlist" method="POST" action="/wishlist/AjouterListe.php">
