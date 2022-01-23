@@ -7,10 +7,10 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 /*********************
- * 
+ *
  * Partie dediee a slim pour gerer les routes urls
  * et demarage d eloquent pour gerer la BDD
- * 
+ *
  ********************/
 
 Eloquent::start('src/conf/conf.ini');
@@ -18,7 +18,7 @@ Eloquent::start('src/conf/conf.ini');
 session_start();
 
 /**
- * lignes provisoires permettant de tester rapidement 
+ * lignes provisoires permettant de tester rapidement
  * le POV participant et le POV proprietaire de liste
  */
 //$_SESSION['typeGens'] = "participant";
@@ -32,7 +32,7 @@ $app = new \Slim\App();
  *
  *****************************************/
 
-$app->get('/item/{id}', 
+$app->get('/item/{id}',
     function (Request $rq, Response $rp, $args):Response{
 
         $control = new \mywishlist\controleurs\ControleurParcours($this);
@@ -42,7 +42,7 @@ $app->get('/item/{id}',
 );
 
 
-$app->get('/liste/{token}', 
+$app->get('/liste/{token}',
     function (Request $rq, Response $rp, $args):Response{
 
         $control = new \mywishlist\controleurs\ControleurParcours($this);
@@ -50,7 +50,7 @@ $app->get('/liste/{token}',
     }
 );
 
-$app->get('/liste/{token}/item/{id}', 
+$app->get('/liste/{token}/item/{id}',
     function (Request $rq, Response $rp, $args):Response{
 
         $control = new \mywishlist\controleurs\ControleurParcours($this);
@@ -59,19 +59,26 @@ $app->get('/liste/{token}/item/{id}',
 );
 
 /*********************************************
- * 
+ *
  * partie dediee a la modification des informations/contenu :
  * Ajout de liste, items
  * Modifications
  * etc ...
- * 
+ *
  **********************************************/
 
-$app->get('/liste/{token}/add/item', 
+$app->get('/liste/{token}/add/item',
     function (Request $rq, Response $rp, $args):Response{
 
         $control = new \mywishlist\controleurs\ControleurGestion($this);
         return($control->genererFormulaireAjoutItem($rq, $rp, $args));
+    }
+);
+
+$app->get('/liste/{token}/modify',
+    function (Request $rq, Response $rp, $args):Response{
+        $control = new \mywishlist\controleurs\ControleurGestion($this);
+        return ($control->genererForulaireModificationListe($rq, $rp, $args));
     }
 );
 
@@ -101,13 +108,13 @@ $app->get('/utilisateurs/{username}',
 
 
 /*****************************
- * 
+ *
  * Partie dediee a l affichage du main
  * il consiste en un menu simple qui permet de se diriger vers l affichage d une liste
  * ou d un item
- * 
+ *
  ****************************/
-$app->get('/', 
+$app->get('/',
     function(Request $rq, Response $rp, $args):Response{
         $html = <<<END
 
@@ -137,6 +144,7 @@ $app->get('/',
                         <button id="bitem">Consulter un item</button>
                         <button id="baddlist">Ajouter une liste</button>
                         <button id="bcreercagnotte" >Créer une cagnotte</button>
+                        <button id="bmodifliste" >Modifier une liste</button>
                     </div>
                 </article>
 
@@ -168,6 +176,11 @@ $app->get('/',
                     <label>Montant :</label>
                     <input ="text" name="prix">
                     <button type="submit" class="action">Créer la cagnotte</button>
+                </form>
+                <form id="fmodifliste" method="POST" action="/wishlist/Authentification/login.php">
+                    <label>Token de la liste :</label>
+                    <input ="text" name="token">
+                    <button type="submit" class="action">Modifier la liste</button>
                 </form>
                     <a href="/wishlist/credits.php"><button>Crédits</button></a>
                 <script src="js/listener.js"></script>
