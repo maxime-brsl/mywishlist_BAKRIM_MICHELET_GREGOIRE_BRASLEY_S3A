@@ -26,11 +26,6 @@ $_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
 
-/****************************************
- * 
- * Partie dediee a la navigation au sein du site 
- * 
- *****************************************/
 
 $app->get('/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
@@ -60,7 +55,7 @@ $app->get('/liste/{token}/item/{id}',
 
 /*********************************************
  * 
- * partie dediee a la modification des informations/contenu : 
+ * partie dediee a la modification de la BDD en dur : 
  * Ajout de liste, items
  * Modifications
  * etc ...
@@ -70,15 +65,22 @@ $app->get('/liste/{token}/item/{id}',
 $app->get('/liste/{token}/add/item', 
     function (Request $rq, Response $rp, $args):Response{
 
-        $control = new \mywishlist\controleurs\ControleurGestion($this);
+        $control = new \mywishlist\controleurs\ControleurAjout($this);
         return($control->genererFormulaireAjoutItem($rq, $rp, $args));
     }
 );
 
-$app->get('/item/{iditem}/modify', 
+/*****************************
+ *
+ * Partie dediee a l'authenfication
+ * il consiste a diriger l'utilisateur vers son espace
+ *
+ ****************************/
+$app->get('/utilisateurs/{username}',
     function (Request $rq, Response $rp, $args):Response{
-        $control = new \mywishlist\controleurs\ControleurGestion($this);
-        return($control->genererForulaireModificationItem($rq, $rp, $args));
+
+        $control = new \mywishlist\controleurs\ControleurAuthentification($this);
+        return($control->page_connexion($rq, $rp, $args));
     }
 );
 
@@ -102,14 +104,10 @@ $app->get('/',
             </head>
             <body>
 
-                <h1>MyWishList</h1>
-                <h2>Bienvenue sur le projet MyWishList d'un groupe de 4 étudiants, réalisé en PHP</h2>
-                
-                <p>
-                Ce projet consiste à la gestion de listes de souhaits. </br>
-                Un participant à une liste pourra réserver un item, tandis que le propriétaire d'une 
-                liste pourra ajouter des items, les modifier si ils ne sont pas encore réservés, etc ...
-                </p>
+                <h1>Bondour !!!</h1>
+                <h2>Bienvenue sur le projet PHP wishlist d'un groupe d'étudiants</h2>
+                <button><a href="/wishlist/Authentification/login.php">Se Connecter</a></button>
+                <button><a href="/wishlist/Authentification/register.php">S'Enregistrer</a></button>
 
                 <article>
                     <h3>Que voulez vous faire ?</h3>
@@ -117,41 +115,39 @@ $app->get('/',
                         <button id="blist">Consulter une liste</button>
                         <button id="bitem">Consulter un item</button>
                         <button id="baddlist">Ajouter une liste</button>
-                        <button id="bcreercagnotte">Créer une cagnotte</button>
+                        <button id="bcreercagnotte" >Créer une cagnotte</button>
                     </div>
                 </article>
 
-                <form id="fitem" method="POST" action="/wishlist/redirect.php">
+                <form id="fitem" method="POST" action="/wishlist/Authentification/login.php">
                     <label>Numero de l'item</label>
                     <input ="text" name="iditem">
-                    <button type="submit">Chercher l'item</button>
+                    <button type="submit" class="action">Chercher l'item</button>
                 </form>
 
-                <form id="flist" method="POST" action="/wishlist/redirect.php">
+                <form id="flist" method="POST" action="/wishlist/Authentification/login.php">
                     <label>Token de la liste</label>
                     <input ="text" name="token">
-                    <button type="submit">Chercher la liste</button>
+                    <button type="submit" class="action">Chercher la liste</button>
                 </form>
                 
-                <form id="faddlist" method="POST" action="/wishlist/AjouterListe.php">
+                <form id="faddlist" method="POST" action="/wishlist/Authentification/login.php">
                     <label>Titre :</label>
                     <input ="text" name="title">
                     <label>Description :</label>
                     <input ="text" name="desc">
                     <label>Date d'expiration (YYYY-MM-DD) :</label>
                     <input ="text" name="exp">
-                    <button type="submit">Ajouter la liste</button>
+                    <button type="submit" class="action">Ajouter la liste</button>
                 </form>
                 
-                <form id="fcreercagnotte" method="POST">
+                <form id="fcreercagnotte" method="POST" action="/wishlist/Authentification/login.php">
                     <label>ID de l'item :</label>
                     <input ="text" name="id_item">
                     <label>Montant :</label>
                     <input ="text" name="prix">
-                    <button type="submit">Créer la cagnotte</button>
+                    <button type="submit" class="action">Créer la cagnotte</button>
                 </form>
-
-                <a href="/wishlist/credits.php"><button>Crédits</button></a>
                     
                 <script src="js/listener.js"></script>
             </body>
