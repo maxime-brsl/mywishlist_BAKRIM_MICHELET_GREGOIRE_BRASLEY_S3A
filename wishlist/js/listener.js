@@ -4,6 +4,7 @@ let boutonItem = document.querySelector("#bitem");
 let boutonAddList = document.querySelector("#baddlist");
 let boutonCreerCagnotte = document.querySelector("#bcreercagnotte");
 let boutonJoindreListe = document.querySelector("#bjoindrelist")
+let boutonModifListe = document.querySelector("#bmodifliste");
 
 let formulaireItem = document.querySelector("#fitem");
 let formulaireListe = document.querySelector("#flist");
@@ -11,6 +12,7 @@ let formulaireListe = document.querySelector("#flist");
 let formulaireAddListe = document.querySelector("#faddlist");
 let formulaireJoindreListe = document.querySelector("#flistjoin");
 let formulaireCreerCagnotte = document.querySelector("#fcreercagnotte");
+let formulaireModifListe = document.querySelector("#fmodifliste");
 
 formulaireItem.style.display = "none";
 formulaireListe.style.display = "none";
@@ -18,7 +20,7 @@ formulaireListe.style.display = "none";
 formulaireAddListe.style.display = "none";
 formulaireCreerCagnotte.style.display = "none";
 formulaireJoindreListe.style.display = "none";
-
+formulaireModifListe.style.display= "none";
 
 boutonListe.addEventListener("click", () => {
     formulaireListe.style.display = "block";
@@ -27,6 +29,7 @@ boutonListe.addEventListener("click", () => {
     formulaireAddListe.style.display = "none";
     formulaireCreerCagnotte.style.display = "none";
     formulaireJoindreListe.style.display = "none";
+    formulaireModifListe.style.display= "none";
 });
 
 boutonItem.addEventListener("click", () => {
@@ -36,6 +39,7 @@ boutonItem.addEventListener("click", () => {
     formulaireAddListe.style.display = "none";
     formulaireCreerCagnotte.style.display = "none";
     formulaireJoindreListe.style.display = "none";
+    formulaireModifListe.style.display= "none";
 });
 /*
 boutonAjoutItem.addEventListener("click", () => {
@@ -55,6 +59,7 @@ boutonAddList.addEventListener("click", () => {
     formulaireAddListe.style.display = "block";
     formulaireCreerCagnotte.style.display = "none";
     formulaireJoindreListe.style.display = "none";
+    formulaireModifListe.style.display= "none";
 });
 
 boutonCreerCagnotte.addEventListener("click", () => {
@@ -64,6 +69,7 @@ boutonCreerCagnotte.addEventListener("click", () => {
     formulaireAddListe.style.display = "none";
     formulaireCreerCagnotte.style.display = "block";
     formulaireJoindreListe.style.display = "none";
+    formulaireModifListe.style.display= "none";
 });
 
 boutonJoindreListe.addEventListener("click",() =>{
@@ -73,4 +79,15 @@ boutonJoindreListe.addEventListener("click",() =>{
     formulaireAddListe.style.display = "none";
     formulaireCreerCagnotte.style.display = "none";
     formulaireJoindreListe.style.display = "block";
+    formulaireModifListe.style.display= "none";
 })
+
+boutonModifListe.addEventListener("click", () => {
+    formulaireItem.style.display = "none";
+    formulaireListe.style.display = "none";
+    //formulaireAjoutItem.style.display = "none";
+    formulaireAddListe.style.display = "none";
+    formulaireCreerCagnotte.style.display = "none";
+    formulaireModifListe.style.display= "block";
+    formulaireJoindreListe.style.display = "none";
+});
