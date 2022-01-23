@@ -169,7 +169,7 @@ $app->get('/',
                     <input ="text" name="prix">
                     <button type="submit" class="action">Créer la cagnotte</button>
                 </form>
-                    
+                    <a href="/wishlist/credits.php"><button>Crédits</button></a>
                 <script src="js/listener.js"></script>
             </body>
 
