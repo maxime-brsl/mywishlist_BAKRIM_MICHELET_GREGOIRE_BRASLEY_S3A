@@ -45,4 +45,22 @@ class ControleurGestion{
         return($rp);
     }
 
+    /**
+     * fonction qui permet de generer le formulaire de modification d une liste
+     */
+    public function genererForulaireModificationListe($rq, $rp, $args){
+
+        // on recupere la liste avec son token
+        $liste = \mywishlist\models\Liste::where('token', '=', $args['token'])->first();
+
+        // on va generer le formulaire de modification
+        $vue = new \mywishlist\view\VueModifListe();
+        $form = $vue->formulaireModificationListe($liste);
+        $pageHTML = $vue->pageHTML($form);
+
+        // on ecrit ce formulaire
+        $rp->getBody()->write($pageHTML);
+        return($rp);
+    }
+
 }

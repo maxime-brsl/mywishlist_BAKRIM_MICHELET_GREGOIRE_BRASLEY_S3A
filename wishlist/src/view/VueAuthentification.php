@@ -31,6 +31,7 @@ class VueAuthentification{
                             <button id="bcreercagnotte">Créer une cagnotte</button>
                             <button id="bjoindrelist">Joindre une liste</button>
                             <button><a href="/wishlist/Authentification/Listecreateurs.php">Voir la liste des createurs</a></button>
+                            <button id="bmodifliste" >Modifier une liste</button>
                         </div>
                     </article>
     
@@ -68,6 +69,11 @@ class VueAuthentification{
                         <label>Montant :</label>
                         <input ="text" name="prix">
                         <button type="submit" class="action">Créer la cagnotte</button>
+                    </form>
+                    <form id="fmodifliste" method="POST" action="/wishlist/redirect.php">
+                        <label>Token de la liste :</label>
+                        <input ="text" name="token">
+                        <button type="submit" class="action">Modifier la liste</button>
                     </form>
                         
                     <script src="../js/listener.js"></script>

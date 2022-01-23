@@ -286,6 +286,10 @@ class VueProprio{
                 <form id="fajoutitem" method="GET" action="/wishlist/liste/$objet->token/add/item">
                 <button type="submit">Rajouter un item à ma liste</button>
                 </form>
+                
+                <form id="fmodiflist" action="/wishlist/liste/$objet->token/modify">
+                    <button type="submit">Modifier cette liste</button>
+                </form>
 
             </article>
 
