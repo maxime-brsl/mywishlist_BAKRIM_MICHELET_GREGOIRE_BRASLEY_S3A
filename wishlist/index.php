@@ -26,6 +26,11 @@ $_SESSION['typeGens'] = "proprio";
 
 $app = new \Slim\App();
 
+/****************************************
+ *
+ * Partie dediee a la navigation au sein du site
+ *
+ *****************************************/
 
 $app->get('/item/{id}', 
     function (Request $rq, Response $rp, $args):Response{
@@ -40,7 +45,7 @@ $app->get('/item/{id}',
 $app->get('/liste/{token}', 
     function (Request $rq, Response $rp, $args):Response{
 
-        $control = new \mywishlist\controleurs\ControleurParcours($this);
+        $control = new \mywishlist\controleurs\ControleurGestion($this);
         return($control->page_une_liste($rq, $rp, $args));
     }
 );
@@ -55,7 +60,7 @@ $app->get('/liste/{token}/item/{id}',
 
 /*********************************************
  * 
- * partie dediee a la modification de la BDD en dur : 
+ * partie dediee a la modification des informations/contenu :
  * Ajout de liste, items
  * Modifications
  * etc ...
@@ -65,12 +70,22 @@ $app->get('/liste/{token}/item/{id}',
 $app->get('/liste/{token}/add/item', 
     function (Request $rq, Response $rp, $args):Response{
 
-        $control = new \mywishlist\controleurs\ControleurAjout($this);
+        $control = new \mywishlist\controleurs\ControleurGestion($this);
         return($control->genererFormulaireAjoutItem($rq, $rp, $args));
     }
 );
 
-/*****************************
+$app->get('/item/{iditem}/modify',
+    function (Request $rq, Response $rp, $args):Response{
+    $control = new \mywishlist\controleurs\ControleurGestion($this);
+    return ($control->genererForulaireModificationItem($rq, $rp, $args));
+}
+);
+
+
+
+
+    /*****************************
  *
  * Partie dediee a l'authenfication
  * il consiste a diriger l'utilisateur vers son espace
@@ -104,8 +119,14 @@ $app->get('/',
             </head>
             <body>
 
-                <h1>Bondour !!!</h1>
-                <h2>Bienvenue sur le projet PHP wishlist d'un groupe d'étudiants</h2>
+                 <h1>MyWishList</h1>
+                <h2>Bienvenue sur le projet MyWishList d'un groupe de 4 étudiants, réalisé en PHP</h2>
+                
+                <p>
+                Ce projet consiste à la gestion de listes de souhaits. </br>
+                Un participant à une liste pourra réserver un item, tandis que le propriétaire d'une 
+                liste pourra ajouter des items, les modifier si ils ne sont pas encore réservés, etc ...
+                </p>
                 <button><a href="/wishlist/Authentification/login.php">Se Connecter</a></button>
                 <button><a href="/wishlist/Authentification/register.php">S'Enregistrer</a></button>
 
