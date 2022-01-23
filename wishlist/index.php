@@ -45,7 +45,7 @@ $app->get('/item/{id}',
 $app->get('/liste/{token}', 
     function (Request $rq, Response $rp, $args):Response{
 
-        $control = new \mywishlist\controleurs\ControleurGestion($this);
+        $control = new \mywishlist\controleurs\ControleurParcours($this);
         return($control->page_une_liste($rq, $rp, $args));
     }
 );
