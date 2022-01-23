@@ -144,7 +144,6 @@ $app->get('/',
                         <button id="bitem">Consulter un item</button>
                         <button id="baddlist">Ajouter une liste</button>
                         <button id="bcreercagnotte" >Créer une cagnotte</button>
-                        <button id="bmodifliste" >Modifier une liste</button>
                     </div>
                 </article>
 
@@ -176,11 +175,6 @@ $app->get('/',
                     <label>Montant :</label>
                     <input ="text" name="prix">
                     <button type="submit" class="action">Créer la cagnotte</button>
-                </form>
-                <form id="fmodifliste" method="POST" action="/wishlist/Authentification/login.php">
-                    <label>Token de la liste :</label>
-                    <input ="text" name="token">
-                    <button type="submit" class="action">Modifier la liste</button>
                 </form>
                     <a href="/wishlist/credits.php"><button>Crédits</button></a>
                 <script src="js/listener.js"></script>
