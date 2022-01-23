@@ -22,7 +22,6 @@ if (isset($_REQUEST['username'], $_REQUEST['password'])){
                echo "<div class='sucess'>
                  <h3>Vous êtes inscrits avec succès.</h3>
            </div>";
-               sleep(2);
                header("Location: http://localhost/wishlist/");
            } else {
                $message = "Le mot de passe est different dans le champ de confirmation";

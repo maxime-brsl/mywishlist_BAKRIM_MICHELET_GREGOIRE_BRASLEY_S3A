@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+$user = $_SESSION['username'];
 // on filtre les donnees transmises dans les formulaires
 $token = filter_var($_POST['token'], FILTER_SANITIZE_STRING);
 $iditem = filter_var($_POST['iditem'], FILTER_SANITIZE_STRING);
@@ -23,7 +24,7 @@ if(isset($nomItem) && $duree > 0){
     setcookie($nomItem, $msg, time() + $duree, "/");
 
     // enfin on redirige l utilisateur sur la page principale
-    header("Location: http://localhost/wishlist/");
+    header("Location: http://localhost/wishlist/utilisateurs/$user");
 }
 else if(isset($_POST['token'])){
     // si le token est set cela indique que l on voulait aller sur une liste

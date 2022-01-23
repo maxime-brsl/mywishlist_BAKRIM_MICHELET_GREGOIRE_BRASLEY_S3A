@@ -18,9 +18,10 @@ class VueAuthentification{
                 </head>
                 <body>
    
-                    <h1>Bondour $_SESSION[username] </h1>
+                    <h1>Bonjour $_SESSION[username] </h1>
                     <button><a href="/wishlist/Authentification/logout.php">Se Deconnecter</a></button>
                     <button><a href="/wishlist/Authentification/changepassword.php">Changer le mot de passe</a></button>
+                     <button><a href="/wishlist/Authentification/Suppressioncompte.php">Supprimer le compte</a></button>
     
                     <article>
                         <h3>Que voulez vous faire ?</h3>

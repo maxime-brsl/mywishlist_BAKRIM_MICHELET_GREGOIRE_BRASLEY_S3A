@@ -3,6 +3,8 @@
 require_once __DIR__ . '/vendor/autoload.php';
 use mywishlist\bd\Eloquent;
 Eloquent::start('src/conf/conf.ini');
+session_start();
+$user = $_SESSION['username'];
 
 
 $titre = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
@@ -20,5 +22,5 @@ $insertion->token = "nosecure".$insertion->no;
 
 $insertion->save();
 echo "<script type='text/javascript'>alert('Liste Ajoutée');</script>";
-header("Location: http://localhost/wishlist/");
+header("Location: http://localhost/wishlist/utilisateurs/$user");
 
